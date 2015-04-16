@@ -6,8 +6,15 @@
 int triangular(int number)
 {
 	// ToDo: Exercise 1.a - return triangular number
+	int i = 1;
+	int temp = 0;
+	
+	while (i <= number){
+		temp += i;
+		i++;
+	}
 
-	return 0;
+	return temp;
 }
 
 void pretty_print(int decimal)
@@ -30,7 +37,7 @@ int main(int argc, char * argv[])
 
 	// ToDo: Exercise 1.a - print triangular number to console
 
-	std::cout << "Hello World";
+	std::cout << triangular(n);
 
 	return 0;
 }
