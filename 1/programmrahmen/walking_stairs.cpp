@@ -7,6 +7,12 @@
 
 int combinations(int number)
 {
+	/*it works like fibonacci --> Say you are at the beginning and have the choice to make one or two steps at first:
+	a) one step: there are n-1 steps left
+	b) two steps: there are n-2 steps left
+		--> combinations(n) = combinations(n-1) + combinations(n-2),combinations(1)=1, combinations(2)=1
+	**/
+
 	return 0;
 }
 

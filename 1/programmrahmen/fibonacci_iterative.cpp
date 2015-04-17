@@ -28,8 +28,6 @@ int fibonacci(int number)
 		}
 		return temp;
 	}
-
-	return 0;
 }
 
 int main(int argc, char * argv[])

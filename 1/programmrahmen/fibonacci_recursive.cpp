@@ -19,8 +19,6 @@ int fibonacci(int number)
 	else {
 		return fibonacci(number - 1) + fibonacci(number - 2);
 	}
-
-	return 0;
 }
 
 int main(int argc, char * argv[])
