@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
 	// ToDo: Exercise 3.b - print change data as CSV to console 
 	if (argc > 3) {
 		if (argc != 5) {
-			std::cout << "Usage: ./change due paid -o file.csv";
+			std::cout << "Usage: ./change due paid -o <filename>";
 			return 1;
 		}
 		std::ofstream write(argv[4]);
