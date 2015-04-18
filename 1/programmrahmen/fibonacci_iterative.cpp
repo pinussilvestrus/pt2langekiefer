@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 
-
+static int sum = 0;
 int fibonacci(int number)
 {
 	// ToDo: Exercise 2.c - count number of calculation steps
@@ -19,12 +19,13 @@ int fibonacci(int number)
 	}
 	else {
 		int temp = 0;
-		int a = 1; //for fib(1);
-		int b = 1; //for fib(2);
-		for (int i = 3;i<=number;i++) {
+		int a = 0; 
+		int b = 1;
+		for (int i = 2;i<=number;i++) {
 			temp = a + b;
 			a = b;
 			b = temp;
+			sum++; //counting up ine summation
 		}
 		return temp;
 	}
@@ -38,8 +39,8 @@ int main(int argc, char * argv[])
 	int n = std::atoi(argv[1]); 
 
 	// ToDo: Exercise 2.c - print calculation steps
-
-	std::cout << fibonacci(n);
+	int fb = fibonacci(n);
+	std::cout << n << " : " << fb << " : " << "#" << sum;
 
 	return 0;
 }
