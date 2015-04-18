@@ -64,17 +64,15 @@ int main(int argc, char * argv[])
 		return 1;	// invalid number of parameters
 		
 	int n = std::atoi(argv[1]); 
-	
-	if(n <= 1 || n >= 65536){
-		std::cout << "[<1>;<65535>] \n[<cdmin>;<cdmax>]"; // No clue yet what cdmin/cdmax sind.
+	// ToDo: Exercise 1.b - check if n is in domain, if not print valid domain and codomain and return 2
+	if(n < 1 || n > 65535){
+		std::cout << "domain = [1;65535], codomain = [1;2147450880]"; //domain = Definitionsbereich, codomain = Wertebereich
+		return 1;
 	}
+	// ToDo: Exercise 1.c - print all numbers with decimal marks
 	else{
 	    pretty_print(triangular(n));
 	}
-
-	// ToDo: Exercise 1.c - print all numbers with decimal marks
-
-	// ToDo: Exercise 1.b - check if n is in domain, if not print valid domain and codomain and return 2
 
 	// ToDo: Exercise 1.a - print triangular number to console
 
