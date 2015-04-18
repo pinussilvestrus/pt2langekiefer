@@ -12,6 +12,27 @@ int combinations(int number)
 	b) two steps: there are n-2 steps left
 		--> combinations(n) = combinations(n-1) + combinations(n-2),combinations(0)=combinations(1)=1
 	**/
+	if (number < 0) {
+		return 0;
+	}
+
+	if (number == 0 || number == 1) {
+		return 1;
+	}
+	else {
+		/**
+		choose the iterative way, because it's faster
+		*/
+		int temp = 0;
+		int a = 1;
+		int b = 1;
+		for (int i = 2; i <= number; i++) {
+			temp = a + b;
+			a = b;
+			b = temp;
+		}
+		return temp;
+	}
 
 	return 0;
 }
