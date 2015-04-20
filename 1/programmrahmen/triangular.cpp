@@ -66,8 +66,8 @@ int main(int argc, char * argv[])
 	int n = std::atoi(argv[1]); 
 	// ToDo: Exercise 1.b - check if n is in domain, if not print valid domain and codomain and return 2
 	if(n < 1 || n > 65535){
-		std::cout << "domain = [1;65535], codomain = [1;2147450880]"; //domain = Definitionsbereich, codomain = Wertebereich
-		return 1;
+		std::cout << "domain = [1;"; pretty_print(65535); std::cout << "], codomain = [1;"; pretty_print(2147450880); std::cout<< "]"; //domain = Definitionsbereich, codomain = Wertebereich
+		return 2;
 	}
 	// ToDo: Exercise 1.c - print all numbers with decimal marks
 	else{
