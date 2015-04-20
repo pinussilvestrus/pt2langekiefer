@@ -27,7 +27,10 @@ int fibonacci(int number)
 			b = temp;
 			sum++; //counting up ine summation
 		}
-		return temp;
+		if (temp <= 32767) { //filter bad output
+			return temp; 
+		}
+		else { return 0; }
 	}
 }
 

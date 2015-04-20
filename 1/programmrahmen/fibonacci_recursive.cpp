@@ -7,12 +7,12 @@ int fibonacci(int number)
 {
 	// ToDo: Exercise 2.c - count number of calculation steps
 	// we found out, that the correct number of summations when n is 8
-	// has to be "33" and not 47 (given in task).... see this in:
+	// has to be "33" and not 41 (given in task).... see this in:
 	// http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibrab.html, 
 	// "The number of additions when computing f(n)"
 
 	// ToDo: Exercise 2.b - retun 0 on bad arguments
-	if (number <= 0 || number > 32767) { //32767 max for int
+	if (number <= 0 || number > 23) { //32767 is max for int, and fib(24) goes over it
 		return 0;
 	}
 
