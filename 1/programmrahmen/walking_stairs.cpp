@@ -5,7 +5,7 @@
 
 // ToDo: Exercise 2.d - adapt and implement combinations
 
-unsigned long combinations(int number)
+unsigned long long combinations(int number)
 {
 	/*it works like fibonacci --> Say you are at the beginning and have the choice to make one or two steps at first:
 	a) one step: there are n-1 steps left
@@ -23,9 +23,9 @@ unsigned long combinations(int number)
 		/**
 		choose the iterative way, because it's faster
 		*/
-		long temp = 0;
-		long a = 1;
-		long b = 1;
+		unsigned long long temp = 0;
+		unsigned long long a = 1;
+		unsigned long long b = 1;
 		for (int i = 2; i <= number; i++) {
 			temp = a + b;
 			a = b;
