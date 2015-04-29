@@ -1,6 +1,8 @@
 #include <iostream>
 #include <ctime>
 #include "bitmap_image.hpp"
+#include <string.h>
+#include <cstring>
 
 struct Raster {
 	Raster(int w, int h) : width(w), height(h)
@@ -13,6 +15,11 @@ struct Raster {
 		data = new int[width*height];
 
 		//Todo Exercise 2.3a): Fill randomly. Probability of value 1 is seedProbability otherwise value is 0
+		for (int i = 0; i < height; i++){
+			for (int j = 0; j < width; j++){
+
+			}
+		}
 	}
 
 	Raster(const std::string &filename)
@@ -27,9 +34,24 @@ struct Raster {
 		height = image.height();
 		width = image.width();
 
+		unsigned char red;
+		unsigned char green;
+		unsigned char blue;
+
 		data = new int[width*height];
 		
 		//Todo Exercise 2.3a): Load image by using image.get_pixel(...). A black pixels mean 1 - all other values 0.
+		for (int i = 0; i < height; i++){
+			for (int j = 0; j < width; j++){
+				image.get_pixel(i, j, red, green, blue);
+				if (red == 255 && green == 255 && blue == 255){
+					data[i, j] = 1;
+				}
+				else {
+					data[i, j] = 0;
+				}
+			}
+		}
 	}
 
 	void save(const std::string &filename)
@@ -145,6 +167,36 @@ void simulateNextState(Raster &raster, bool isTorus)
 	//Todo Exercise 2.3b): Play one iteration of Game of Life
 }
 
+std::string to_string(int number){	// As it seems my compiler doesn't support std::to_string so I'm using this one!  Hope it doesn't bother anyone.(Yes my compiler is up to date and the library as well)
+	std::string number_string = "";
+	char ones_char;
+	int ones = 0;
+	while (true){
+		ones = number % 10;
+		switch (ones){
+		case 0: ones_char = '0'; break;
+		case 1: ones_char = '1'; break;
+		case 2: ones_char = '2'; break;
+		case 3: ones_char = '3'; break;
+		case 4: ones_char = '4'; break;
+		case 5: ones_char = '5'; break;
+		case 6: ones_char = '6'; break;
+		case 7: ones_char = '7'; break;
+		case 8: ones_char = '8'; break;
+		case 9: ones_char = '9'; break;
+		default: ("Trouble converting number to string.");
+		}
+		number -= ones;
+		number_string = ones_char + number_string;
+		if (number == 0){
+			break;
+		}
+		number = number / 10;
+	}
+	return number_string;
+}
+
+
 int main(int argc, char* argv[])
 {
 	Raster* raster = nullptr;
@@ -162,7 +214,7 @@ int main(int argc, char* argv[])
 	//Todo Exercise 2.3a): Initialize random seed before this loop
 	for (int iteration = 0; iteration <= cmd.maxIterations; iteration++)
 	{
-		raster->save(cmd.outputDirectory + "game_of_life_" + std::to_string(iteration) + ".bmp");
+		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
 		simulateInvasion(*raster, cmd.invasionFactor);
 		simulateNextState(*raster, cmd.isTorus);
 	}
