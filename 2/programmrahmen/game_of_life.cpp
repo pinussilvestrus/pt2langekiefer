@@ -14,11 +14,26 @@ struct Raster {
 	{
 		data = new int[width*height];
 
-		//Todo Exercise 2.3a): Fill randomly. Probability of value 1 is seedProbability otherwise value is 0
-		for (int i = 0; i < height; i++){
-			for (int j = 0; j < width; j++){
+		int numSeeds = width * height * seedProbability;
 
+		//Todo Exercise 2.3a): Fill randomly. Probability of value 1 is seedProbability otherwise value is 0
+		labelX:
+		for (int i = 0; i < width; i++){
+			for (int j = 0; j < height; j++){
+				int random = rand() % 2;
+				if (numSeeds > 0 && random == 1 && data[i,j]!=1){
+					data[i,j] = 1;
+					std::cout << data[i, j] << "\n";
+					numSeeds--;
+				}
+				else {
+					data[i,j] = 0;
+					std::cout << data[i, j] << "\n";
+				}
 			}
+		}
+		if (numSeeds > 0) { //checks wether the seedProbability is right
+			goto labelX;
 		}
 	}
 
@@ -41,8 +56,8 @@ struct Raster {
 		data = new int[width*height];
 		
 		//Todo Exercise 2.3a): Load image by using image.get_pixel(...). A black pixels mean 1 - all other values 0.
-		for (int i = 0; i < height; i++){
-			for (int j = 0; j < width; j++){
+		for (int i = 0; i < width; i++){
+			for (int j = 0; j < height; j++){
 				image.get_pixel(i, j, red, green, blue);
 				if (red == 255 && green == 255 && blue == 255){
 					data[i, j] = 1;
@@ -57,6 +72,27 @@ struct Raster {
 	void save(const std::string &filename)
 	{
 		//Todo Exercise 2.3a): Save image by using image.set_pixel(...). Living cell should be stored as black pixels, all other pixels are white.
+		bitmap_image image(width, height);
+		unsigned char red;
+		unsigned char green;
+		unsigned char blue;
+		for (int i = 0; i < width; i++){
+			for (int j = 0; i < height; j++){
+				if (data[i, j] == 1){
+					red = 255;
+					blue = 255;
+					green = 255;
+					image.set_pixel(i, j, red,blue,green);
+				}
+				else {
+					red = 0;
+					blue = 0;
+					green = 0;
+					image.set_pixel(i, j, red, blue, green);
+				}
+			}
+		}
+		image.save_image(filename);
 	}
 
 	~Raster()
@@ -212,12 +248,13 @@ int main(int argc, char* argv[])
 	}
 
 	//Todo Exercise 2.3a): Initialize random seed before this loop
+	/*cmd.invasionFactor = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	for (int iteration = 0; iteration <= cmd.maxIterations; iteration++)
 	{
 		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
 		simulateInvasion(*raster, cmd.invasionFactor);
 		simulateNextState(*raster, cmd.isTorus);
-	}
+	}*/
 
 	delete raster;
 
