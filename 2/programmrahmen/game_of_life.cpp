@@ -23,12 +23,10 @@ struct Raster {
 				int random = rand() % 2;
 				if (numSeeds > 0 && random == 1 && data[i,j]!=1){
 					data[i,j] = 1;
-					std::cout << data[i, j] << "\n";
 					numSeeds--;
 				}
 				else {
 					data[i,j] = 0;
-					std::cout << data[i, j] << "\n";
 				}
 			}
 		}
@@ -59,7 +57,7 @@ struct Raster {
 		for (int i = 0; i < width; i++){
 			for (int j = 0; j < height; j++){
 				image.get_pixel(i, j, red, green, blue);
-				if (red == 255 && green == 255 && blue == 255){
+				if (red == 0 && green == 0 && blue == 0){
 					data[i, j] = 1;
 				}
 				else {
@@ -73,22 +71,22 @@ struct Raster {
 	{
 		//Todo Exercise 2.3a): Save image by using image.set_pixel(...). Living cell should be stored as black pixels, all other pixels are white.
 		bitmap_image image(width, height);
-		unsigned char red;
-		unsigned char green;
-		unsigned char blue;
+		unsigned char red = 0;
+		unsigned char green = 0;
+		unsigned char blue = 0;
 		for (int i = 0; i < width; i++){
 			for (int j = 0; i < height; j++){
 				if (data[i, j] == 1){
-					red = 255;
-					blue = 255;
-					green = 255;
-					image.set_pixel(i, j, red,blue,green);
+					red = 0;
+					blue = 0;
+					green = 0;
+					image.set_pixel(i, j, red,green,blue);
 				}
 				else {
 					red = 0;
 					blue = 0;
 					green = 0;
-					image.set_pixel(i, j, red, blue, green);
+					image.set_pixel(i, j, red, green, blue);
 				}
 			}
 		}
@@ -182,9 +180,24 @@ struct CommandLineParameter
 
 int neighborValue(const Raster &raster, int x, int y, bool isTorus)
 {
+	int* data = raster.data;
+	int width = raster.width;
+	int height = raster.height;
     //Todo Exercise 2.3b): Extract information for the given cell. Return 0 (dead) if the color equals black. Otherwise return 1
+
 	//Todo Exercise 2.3b): In case isTorus is false and (x, y) is outside of raster, return 0
+	if (!isTorus && (x > height || y > width)){
+		return 0;
+	}
 	//Todo Exercise 2.3b): In case isTorus is true and (x, y) is outside of raster use value of matching cell of opposite side
+	if (isTorus && (x > height || y > width)){
+		return data[x - height, y - height];
+	}
+
+	if (data[x, y] == 0){
+		return 1;
+	}
+
     return 0;
 }
 
@@ -201,6 +214,35 @@ void simulateInvasion(Raster &raster, float invasionFactor)
 void simulateNextState(Raster &raster, bool isTorus)
 {
 	//Todo Exercise 2.3b): Play one iteration of Game of Life
+	int* data = raster.data;
+	int width = raster.width;
+	int height = raster.height;
+
+	for (int i = 0; i < width; i++){
+		for (int j = 0; j < height; j++){
+			int counterNeighbors = 0; //check all 8 neighbors
+			counterNeighbors += neighborValue(raster, i + 1, j, isTorus);
+			counterNeighbors += neighborValue(raster, i + 1, j + 1, isTorus);
+			counterNeighbors += neighborValue(raster, i, j + 1, isTorus);
+			counterNeighbors += neighborValue(raster, i - 1, j, isTorus);
+			counterNeighbors += neighborValue(raster, i - 1, j - 1, isTorus);
+			counterNeighbors += neighborValue(raster, i, j - 1, isTorus);
+			counterNeighbors += neighborValue(raster, i + 1, j - 1, isTorus);
+			counterNeighbors += neighborValue(raster, i - 1, j + 1, isTorus);
+
+			//check rules
+			if (data[i, j] == 0 && counterNeighbors == 3){
+				data[i, j] == 1;
+			} else if (data[i, j] == 1 && counterNeighbors <= 1){
+				data[i, j] = 0;
+			} else if (data[i, j] == 1 && counterNeighbors >= 4){
+				data[i, j] = 0;
+			}
+			else if (data[i, j] == 1 && (counterNeighbors == 2 || counterNeighbors == 3)){
+				data[i, j] = 1;
+			}
+		}
+	}
 }
 
 std::string to_string(int number){	// As it seems my compiler doesn't support std::to_string so I'm using this one!  Hope it doesn't bother anyone.(Yes my compiler is up to date and the library as well)
@@ -248,13 +290,13 @@ int main(int argc, char* argv[])
 	}
 
 	//Todo Exercise 2.3a): Initialize random seed before this loop
-	/*cmd.invasionFactor = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	cmd.invasionFactor = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	for (int iteration = 0; iteration <= cmd.maxIterations; iteration++)
 	{
-		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
+		//raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
 		simulateInvasion(*raster, cmd.invasionFactor);
 		simulateNextState(*raster, cmd.isTorus);
-	}*/
+	}
 
 	delete raster;
 
