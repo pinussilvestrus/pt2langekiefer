@@ -33,9 +33,9 @@ struct Raster {
 	
 
 		//test: print data
-		for (int i = 0; i < width*height; i++){
+		/**for (int i = 0; i < width*height; i++){
 				std::cout << data[i] << " ";
-		}
+		}**/
 	}
 
 	Raster(const std::string &filename)
@@ -70,20 +70,23 @@ struct Raster {
 		}
 
 		//test: print data
-		for (int i = 0; i < width*height; i++){
+		/**for (int i = 0; i < width*height; i++){
 			std::cout << data[i] << " ";
-		}
+		}**/
 	}
 
 	void save(const std::string &filename)
 	{
 		//Todo Exercise 2.3a): Save image by using image.set_pixel(...). Living cell should be stored as black pixels, all other pixels are white.
-		bitmap_image image(width, height);
+		bitmap_image image(height, width);
 		unsigned char red;
 		unsigned char green;
 		unsigned char blue;
 		for (int i = 0; i < height; i++){ //lines
 			for (int j = 0; i < width; j++){
+				if (data[i*width + j] > 1){
+					break; //handles overflow
+				}
 				if (data[i*width+j] == 1){
 					red = 0;
 					blue = 0;
@@ -96,6 +99,7 @@ struct Raster {
 					green = 255;
 					image.set_pixel(i, j, red, green, blue);
 				}
+				//std::cout << data[i*width+j] << " ";
 			}
 		}
 		image.save_image(filename);
@@ -303,7 +307,7 @@ int main(int argc, char* argv[])
 	cmd.invasionFactor = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	for (int iteration = 0; iteration <= cmd.maxIterations; iteration++)
 	{
-		//raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
+		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
 		//simulateInvasion(*raster, cmd.invasionFactor);
 		//simulateNextState(*raster, cmd.isTorus);
 	}
