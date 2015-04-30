@@ -30,12 +30,6 @@ struct Raster {
 				}
 			}
 		}
-	
-
-		//test: print data
-		/**for (int i = 0; i < width*height; i++){
-				std::cout << data[i] << " ";
-		}**/
 	}
 
 	Raster(const std::string &filename)
@@ -68,11 +62,6 @@ struct Raster {
 				}
 			}
 		}
-
-		//test: print data
-		/**for (int i = 0; i < width*height; i++){
-			std::cout << data[i] << " ";
-		}**/
 	}
 
 	void save(const std::string &filename)
@@ -82,6 +71,7 @@ struct Raster {
 		unsigned char red;
 		unsigned char green;
 		unsigned char blue;
+		std::cout << "start saving\n";
 		for (int i = 0; i < height; i++){ //lines
 			for (int j = 0; i < width; j++){
 				if (data[i*width + j] > 1){
@@ -99,7 +89,6 @@ struct Raster {
 					green = 255;
 					image.set_pixel(i, j, red, green, blue);
 				}
-				//std::cout << data[i*width+j] << " ";
 			}
 		}
 		image.save_image(filename);
@@ -198,19 +187,21 @@ int neighborValue(const Raster &raster, int x, int y, bool isTorus)
     //Todo Exercise 2.3b): Extract information for the given cell. Return 0 (dead) if the color equals white. Otherwise return 1
 
 	//Todo Exercise 2.3b): In case isTorus is false and (x, y) is outside of raster, return 0
-	if (!isTorus && (x > height || y > width)){
+	if (!isTorus && (x > width || y > height)){
 		return 0;
 	}
 	//Todo Exercise 2.3b): In case isTorus is true and (x, y) is outside of raster use value of matching cell of opposite side
-	if (isTorus && (x > height || y > width)){
-		return data[x - height, y - height];
+	if (isTorus && (x > width || y > height)){
+		int coordinate = y* width + (x - width);
+		return data[coordinate];
 	}
 
-	if (data[x, y] == 1){
-		return 1;
+	int coordinate = y*width + x; //e.g. x=3, y=2, width=4 --> fourth element in third line and the 11th element in data 
+	if (data[coordinate] == 0){
+		return 0;
 	}
 
-    return 0;
+    return 1;
 }
 
 void simulateInvasion(Raster &raster, float invasionFactor)
@@ -231,8 +222,8 @@ void simulateNextState(Raster &raster, bool isTorus)
 	int width = raster.width;
 	int height = raster.height;
 
-	for (int i = 0; i < width; i++){
-		for (int j = 0; j < height; j++){
+	for (int i = 0; i < height; i++){ //lines
+		for (int j = 0; j < width; j++){
 			int counterNeighbors = 0; //check all 8 neighbors
 			counterNeighbors += neighborValue(raster, i + 1, j, isTorus);
 			counterNeighbors += neighborValue(raster, i + 1, j + 1, isTorus);
@@ -243,17 +234,18 @@ void simulateNextState(Raster &raster, bool isTorus)
 			counterNeighbors += neighborValue(raster, i + 1, j - 1, isTorus);
 			counterNeighbors += neighborValue(raster, i - 1, j + 1, isTorus);
 
-			std::cout << counterNeighbors;
+			std::cout << counterNeighbors << "\n";
 			//check rules
-			if (data[i, j] == 0 && counterNeighbors == 3){
-				data[i, j] == 1;
-			} else if (data[i, j] == 1 && counterNeighbors <= 1){
-				data[i, j] = 0;
-			} else if (data[i, j] == 1 && counterNeighbors >= 4){
-				data[i, j] = 0;
+			int index = i*width + j;
+			if (data[index] == 0 && counterNeighbors == 3){
+				data[index] == 1;
+			} else if (data[index] == 1 && counterNeighbors <= 1){
+				data[index] = 0;
+			} else if (data[index] == 1 && counterNeighbors >= 4){
+				data[index] = 0;
 			}
-			else if (data[i, j] == 1 && (counterNeighbors == 2 || counterNeighbors == 3)){
-				data[i, j] = 1;
+			else if (data[index] == 1 && (counterNeighbors == 2 || counterNeighbors == 3)){
+				data[index] = 1;
 			}
 		}
 	}
@@ -309,7 +301,7 @@ int main(int argc, char* argv[])
 	{
 		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
 		//simulateInvasion(*raster, cmd.invasionFactor);
-		//simulateNextState(*raster, cmd.isTorus);
+		simulateNextState(*raster, cmd.isTorus);
 	}
 
 	delete raster;
