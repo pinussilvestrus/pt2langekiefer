@@ -71,7 +71,7 @@ struct Raster {
 		unsigned char red;
 		unsigned char green;
 		unsigned char blue;
-		std::cout << "start saving\n";
+		//std::cout << "start saving\n";
 		for (int i = 0; i < height; i++){ //lines
 			for (int j = 0; i < width; j++){
 				if (data[i*width + j] > 1){
@@ -212,6 +212,25 @@ void simulateInvasion(Raster &raster, float invasionFactor)
 	}
 
 	//Todo Exercise 2.3c): Flip random cells (probability to flip for each cell is invasionFactor)
+	int* data = raster.data;
+	int height = raster.height;
+	int width = raster.width;
+	
+	int numFlipped = height * width * height;
+
+	while (numFlipped > 0){
+		for (int i = 0; i < height*width; i++){
+			int random = rand() % 2;
+			if (random == 1){
+				switch (data[i]){
+				case 1: data[i] = 0; break;
+				case 0: data[i] = 1; break;
+				}
+				numFlipped--;
+			}
+		}
+	}
+
 
 }
 
@@ -234,7 +253,8 @@ void simulateNextState(Raster &raster, bool isTorus)
 			counterNeighbors += neighborValue(raster, i + 1, j - 1, isTorus);
 			counterNeighbors += neighborValue(raster, i - 1, j + 1, isTorus);
 
-			std::cout << counterNeighbors << "\n";
+			//std::cout << counterNeighbors << "\n";
+
 			//check rules
 			int index = i*width + j;
 			if (data[index] == 0 && counterNeighbors == 3){
@@ -300,7 +320,7 @@ int main(int argc, char* argv[])
 	for (int iteration = 0; iteration <= cmd.maxIterations; iteration++)
 	{
 		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
-		//simulateInvasion(*raster, cmd.invasionFactor);
+		simulateInvasion(*raster, cmd.invasionFactor);
 		simulateNextState(*raster, cmd.isTorus);
 	}
 
