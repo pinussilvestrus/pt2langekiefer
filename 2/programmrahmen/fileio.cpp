@@ -33,45 +33,26 @@ void readTokensAndLines(char* path)
 	std::string name;
 	std::string timezone;
 	int i = 1;
-	int pos;
+	int pos = 0;
 	
 	while (std::getline(file, line)) {
 		std::istringstream linestream;
 		linestream.str(line);
 		
-			if (std::string::npos != (line.find("\"U\""))){
-				timezone = "Unknown";
+			while(std::getline(linestream, parsed, ',')){
+				if(pos == 1){
+					pos++;std::cout << "\"[NAME] - [DATABASE Time Zone]\" -> "<<parsed<<" - ";
+					}
+					else if(pos == 12){
+						pos++;std::cout << parsed << "\n"; continue;
+					}
+					pos++;
 			}
-			else if (std::string::npos != (line.find("\"E\""))){
-				timezone = "Europe";
+			pos = 0;
 			}
-			else if (std::string::npos != (line.find("\"A\""))){
-				timezone = "US/Canada";
-			}
-			else if (std::string::npos != (line.find("\"S\""))){
-				timezone = "South America";
-			}
-			else if (std::string::npos != (line.find("\"O\""))){
-				timezone = "Australia";
-			}
-			else if (std::string::npos != (line.find("\"N\""))){
-				timezone = "None";
-			}
-			else if (std::string::npos != (line.find("\"Z\""))){
-				timezone = "New Zealand";
-			}
-			
-			int posEnd = line.find("\",\"");
-			int posBegin = line.find(",\"");
-			
-			std::cout << "[" << name << "]" << "-" << "[" << timezone << "]" << '\n';
-			i++;
-	
 		// ToDo: Exercise 2.2a - Split line and write result to std::cout
 		// ToDo: Exercise 2.2b - Check each part of line with isValueCorrect and log if values are not supported. Use and extend isValueCorrect function for this.
-		
 	}
-}
 
 int main(int argc, char * argv[])
 {
