@@ -17,21 +17,18 @@ struct Raster {
 		int numSeeds = width * height * seedProbability;
 
 		//Todo Exercise 2.3a): Fill randomly. Probability of value 1 is seedProbability otherwise value is 0
-		labelX:
-		for (int i = 0; i < width; i++){
-			for (int j = 0; j < height; j++){
+
+		while (numSeeds > 0){
+			for (int i = 0; i < (width*height); i++){
 				int random = rand() % 2;
-				if (numSeeds > 0 && random == 1 && data[i,j]!=1){
-					data[i,j] = 1;
+				if (random == 1 && data[i] != 1){
+					data[i] = 1;
 					numSeeds--;
 				}
 				else {
-					data[i,j] = 0;
+					data[i] = 0;
 				}
 			}
-		}
-		if (numSeeds > 0) { //checks wether the seedProbability is right
-			goto labelX;
 		}
 	}
 
@@ -54,14 +51,14 @@ struct Raster {
 		data = new int[width*height];
 		
 		//Todo Exercise 2.3a): Load image by using image.get_pixel(...). A black pixels mean 1 - all other values 0.
-		for (int i = 0; i < width; i++){
-			for (int j = 0; j < height; j++){
+		for (int i = 0; i < height; i++){ //lines
+			for (int j = 0; j < width; j++){
 				image.get_pixel(i, j, red, green, blue);
 				if (red == 0 && green == 0 && blue == 0){
-					data[i, j] = 1;
+					data[i*width + j] = 1;
 				}
 				else {
-					data[i, j] = 0;
+					data[i*width+j] = 0;
 				}
 			}
 		}
@@ -70,22 +67,26 @@ struct Raster {
 	void save(const std::string &filename)
 	{
 		//Todo Exercise 2.3a): Save image by using image.set_pixel(...). Living cell should be stored as black pixels, all other pixels are white.
-		bitmap_image image(width, height);
-		unsigned char red = 0;
-		unsigned char green = 0;
-		unsigned char blue = 0;
-		for (int i = 0; i < width; i++){
-			for (int j = 0; i < height; j++){
-				if (data[i, j] == 1){
+		bitmap_image image(height, width);
+		unsigned char red;
+		unsigned char green;
+		unsigned char blue;
+		std::cout << "start saving\n";
+		for (int i = 0; i < height; i++){ //lines
+			for (int j = 0; i < width; j++){
+				if (data[i*width + j] > 1){
+					break; //handles overflow
+				}
+				if (data[i*width+j] == 1){
 					red = 0;
 					blue = 0;
 					green = 0;
 					image.set_pixel(i, j, red,green,blue);
 				}
 				else {
-					red = 0;
-					blue = 0;
-					green = 0;
+					red = 255;
+					blue = 255;
+					green = 255;
 					image.set_pixel(i, j, red, green, blue);
 				}
 			}
@@ -183,22 +184,24 @@ int neighborValue(const Raster &raster, int x, int y, bool isTorus)
 	int* data = raster.data;
 	int width = raster.width;
 	int height = raster.height;
-    //Todo Exercise 2.3b): Extract information for the given cell. Return 0 (dead) if the color equals black. Otherwise return 1
+    //Todo Exercise 2.3b): Extract information for the given cell. Return 0 (dead) if the color equals white. Otherwise return 1
 
 	//Todo Exercise 2.3b): In case isTorus is false and (x, y) is outside of raster, return 0
-	if (!isTorus && (x > height || y > width)){
+	if (!isTorus && (x > width || y > height)){
 		return 0;
 	}
 	//Todo Exercise 2.3b): In case isTorus is true and (x, y) is outside of raster use value of matching cell of opposite side
-	if (isTorus && (x > height || y > width)){
-		return data[x - height, y - height];
+	if (isTorus && (x > width || y > height)){
+		int coordinate = y* width + (x - width);
+		return data[coordinate];
 	}
 
-	if (data[x, y] == 0){
-		return 1;
+	int coordinate = y*width + x; //e.g. x=3, y=2, width=4 --> fourth element in third line and the 11th element in data 
+	if (data[coordinate] == 0){
+		return 0;
 	}
 
-    return 0;
+    return 1;
 }
 
 void simulateInvasion(Raster &raster, float invasionFactor)
@@ -209,6 +212,7 @@ void simulateInvasion(Raster &raster, float invasionFactor)
 	}
 
 	//Todo Exercise 2.3c): Flip random cells (probability to flip for each cell is invasionFactor)
+
 }
 
 void simulateNextState(Raster &raster, bool isTorus)
@@ -218,8 +222,8 @@ void simulateNextState(Raster &raster, bool isTorus)
 	int width = raster.width;
 	int height = raster.height;
 
-	for (int i = 0; i < width; i++){
-		for (int j = 0; j < height; j++){
+	for (int i = 0; i < height; i++){ //lines
+		for (int j = 0; j < width; j++){
 			int counterNeighbors = 0; //check all 8 neighbors
 			counterNeighbors += neighborValue(raster, i + 1, j, isTorus);
 			counterNeighbors += neighborValue(raster, i + 1, j + 1, isTorus);
@@ -230,16 +234,18 @@ void simulateNextState(Raster &raster, bool isTorus)
 			counterNeighbors += neighborValue(raster, i + 1, j - 1, isTorus);
 			counterNeighbors += neighborValue(raster, i - 1, j + 1, isTorus);
 
+			std::cout << counterNeighbors << "\n";
 			//check rules
-			if (data[i, j] == 0 && counterNeighbors == 3){
-				data[i, j] == 1;
-			} else if (data[i, j] == 1 && counterNeighbors <= 1){
-				data[i, j] = 0;
-			} else if (data[i, j] == 1 && counterNeighbors >= 4){
-				data[i, j] = 0;
+			int index = i*width + j;
+			if (data[index] == 0 && counterNeighbors == 3){
+				data[index] == 1;
+			} else if (data[index] == 1 && counterNeighbors <= 1){
+				data[index] = 0;
+			} else if (data[index] == 1 && counterNeighbors >= 4){
+				data[index] = 0;
 			}
-			else if (data[i, j] == 1 && (counterNeighbors == 2 || counterNeighbors == 3)){
-				data[i, j] = 1;
+			else if (data[index] == 1 && (counterNeighbors == 2 || counterNeighbors == 3)){
+				data[index] = 1;
 			}
 		}
 	}
@@ -293,8 +299,8 @@ int main(int argc, char* argv[])
 	cmd.invasionFactor = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	for (int iteration = 0; iteration <= cmd.maxIterations; iteration++)
 	{
-		//raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
-		simulateInvasion(*raster, cmd.invasionFactor);
+		raster->save(cmd.outputDirectory + "game_of_life_" + to_string(iteration) + ".bmp");
+		//simulateInvasion(*raster, cmd.invasionFactor);
 		simulateNextState(*raster, cmd.isTorus);
 	}
 
