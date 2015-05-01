@@ -1,6 +1,7 @@
 #include <iostream>
 #include <dirent.h>
 #include <string>
+#include <string.h>
 
 #if defined _MSC_VER
 #include <direct.h>
