@@ -53,7 +53,7 @@ struct Raster {
 		//Todo Exercise 2.3a): Load image by using image.get_pixel(...). A black pixels mean 1 - all other values 0.
 		for (int i = 0; i < height; i++){ //lines
 			for (int j = 0; j < width; j++){
-				image.get_pixel(i, j, red, green, blue);
+				image.get_pixel(j, i, red, green, blue);
 				if (red == 0 && green == 0 && blue == 0){
 					data[i*width + j] = 1;
 				}
@@ -67,7 +67,7 @@ struct Raster {
 	void save(const std::string &filename)
 	{
 		//Todo Exercise 2.3a): Save image by using image.set_pixel(...). Living cell should be stored as black pixels, all other pixels are white.
-		bitmap_image image(height, width);
+		bitmap_image image(width, height);
 		unsigned char red;
 		unsigned char green;
 		unsigned char blue;
@@ -81,13 +81,13 @@ struct Raster {
 					red = 0;
 					blue = 0;
 					green = 0;
-					image.set_pixel(i, j, red,green,blue);
+					image.set_pixel(j, i, red,green,blue);
 				}
 				else {
 					red = 255;
 					blue = 255;
 					green = 255;
-					image.set_pixel(i, j, red, green, blue);
+					image.set_pixel(j, i, red, green, blue);
 				}
 			}
 		}
@@ -216,7 +216,7 @@ void simulateInvasion(Raster &raster, float invasionFactor)
 	int height = raster.height;
 	int width = raster.width;
 	
-	int numFlipped = height * width * height;
+	int numFlipped = height * width * invasionFactor;
 
 	while (numFlipped > 0){
 		for (int i = 0; i < height*width; i++){
