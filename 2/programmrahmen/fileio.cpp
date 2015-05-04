@@ -16,7 +16,7 @@ bool isValueCorrect(const std::string &teststring, const int &column)
             regExp = "[a-zA-Z]+";
             break;
 		case 2:
-			regExp = "(([\"][A-Z]{0,4}[\"])|([\\N]))"; // fix it
+			regExp = "[\"][A-Z]{0,4}[\"]";
 			break;
 		case 3:
 			regExp = "[0-9]{1,5}";
@@ -65,7 +65,12 @@ void readTokensAndLines(char* path)
 							write << "\"[NAME] - [DATABASE Time Zone]\" -> "<<name<<" - "<<timezone<< " - " << "wrong country " << country << "\n";
 						}
 						if(isValueCorrect(icao, 2) != true){
-							write << "\"[NAME] - [DATABASE Time Zone]\" -> "<<name<<" - "<<timezone<< " - " << "wrong ICAO " << icao << "\n";
+							if(icao == "\\N"){
+								
+							}else {
+								write << "\"[NAME] - [DATABASE Time Zone]\" -> " << name << " - " << timezone <<
+								" - " << "wrong ICAO " << icao << "\n";
+							}
 						}
 						if(isValueCorrect(altitude, 3) != true){
 							write << "\"[NAME] - [DATABASE Time Zone]\" -> "<<name<<" - "<<timezone<< " - " << "wrong altitude " << altitude << "\n"; //Die Aufgabe ist nicht korrekt gestellt, da die Niederlande und teile Asiens unter der dem Meeresspiegel liegen und dementsprechend auch negativ werte vorkommen
