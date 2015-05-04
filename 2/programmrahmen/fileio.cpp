@@ -56,17 +56,18 @@ void readTokensAndLines(char* path)
 		
 			while(std::getline(linestream, parsed, ',')){
 				if(pos == 1){
-					pos++;std::cout << "\"[NAME] - [DATABASE Time Zone]\" -> "<<parsed<<" - ";
+					pos++;
+					std::cout << "\"[NAME] - [DATABASE Time Zone]\" -> "<<parsed<<" - ";
 					name = parsed;
 					}else if(pos == 12){
-						pos++;std::cout << parsed << "\n"; //continue;
+						std::cout << parsed << "\n";
 						timezone = parsed;
 						if(isValueCorrect(country, 4) != true){
 							write << "\"[NAME] - [DATABASE Time Zone]\" -> "<<name<<" - "<<timezone<< " - " << "wrong country " << country << "\n";
 						}
 						if(isValueCorrect(icao, 2) != true){
 							if(icao == "\\N"){
-								
+								//Um "\N" abzufangen.
 							}else {
 								write << "\"[NAME] - [DATABASE Time Zone]\" -> " << name << " - " << timezone <<
 								" - " << "wrong ICAO " << icao << "\n";
