@@ -5,13 +5,14 @@
 #include <cfloat>
 #include <iomanip>
 #include <vector>
+#include <stdexcept>
 
 // transforms a string to a date. Throws a logic_error if year is *not* between 2005 and 2015
 std::tm stringToTime(std::string date)
 {
     std::tm t;
     std::istringstream ss(date);
-    ss >> std::get_time(&t, "%d.%m.%Y");
+    ss >> strptime(date.c_str(), "%d.%m.%Y", &t);
     
     if(t.tm_year < 105 || t.tm_year > 115)
         throw std::logic_error("Year should be between 2005 and 2015");
