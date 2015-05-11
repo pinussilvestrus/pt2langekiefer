@@ -23,13 +23,21 @@ void ReplaceAll(std::wstring& str, const std::wstring& from, const std::wstring&
 
 //ToDo 3.1a - implement use std::transform()
 void caseConvert(std::wstring& str) {
-    
+  //std::string out;
+  std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))std::tolower);
+  //std::wcout << str << '\n';
 }
 
 //ToDo 3.1b - implement replacement for ä, ö, ü, ß with ae,oe,ue,ss
 //			- use ReplaceAll. wstrings are declared the same way as normal strings but with an "L" in front
 void replace(std::wstring& str) {
-
+  const std::wstring umlaute[] = { L"ä", L"ö", L"ü", L"ß"};
+  const std::wstring umlauteReplace[] = { L"ae", L"oe", L"ue", L"ss"};
+  int i = 0;
+  while(i < 4){
+    ReplaceAll( str, umlaute[i], umlauteReplace[i]);
+    i++;
+  }
 }
 
 //ToDo 3.1c - check if email is correct
@@ -46,11 +54,12 @@ int main(int argc, char * argv[])
         {
             replace(dataset[i][j]);
             caseConvert(dataset[i][j]);
+            std::wcout << dataset[i][j] << '\n';
         }
-        
+
         std::cout << emailCheck(dataset[i][0], dataset[i][1], dataset[i][2], dataset[i][3]) << std::endl;
     }
-    
+
     return 0;
-    
+
 }
