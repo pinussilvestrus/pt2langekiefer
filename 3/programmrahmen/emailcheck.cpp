@@ -43,7 +43,42 @@ void replace(std::wstring& str) {
 //ToDo 3.1c - check if email is correct
 bool emailCheck(std::wstring mail, std::wstring firstname, std::wstring name, std::wstring company)
 {
+  int a = 0;
+  int b = 0;
+  int c = 0;
+
+  int posDot = mail.find(L".");
+  int posDotLast = mail.rfind(L".");
+  int posAt = mail.find(L"@");
+  int diffName = posAt-posDot-1;
+  int diffCompany = posDotLast-posAt-1;
+
+  std::wstring firstnameSub = mail.substr(0,posDot);
+  std::wstring nameSub = mail.substr(posDot+1,diffName);
+  std::wstring companySub = mail.substr(posAt+1,diffCompany);
+
+while(a != 1 || b != 1 || c != 1){
+  if(firstnameSub.compare(firstname) == 0){
+      a = 1;
+    }else {
+      break;
+    }
+  if(nameSub.compare(name) == 0){
+      b = 1;
+    }else {
+      break;
+    }
+  if(companySub.compare(company) == 0){
+      c = 1;
+    } else {
+      break;
+    }
+}
+  if(a == 1 && b == 1 && c == 1){
+    return true;
+  } else {
     return false;
+  }
 }
 
 int main(int argc, char * argv[])
@@ -54,9 +89,7 @@ int main(int argc, char * argv[])
         {
             replace(dataset[i][j]);
             caseConvert(dataset[i][j]);
-            std::wcout << dataset[i][j] << '\n';
         }
-
         std::cout << emailCheck(dataset[i][0], dataset[i][1], dataset[i][2], dataset[i][3]) << std::endl;
     }
 
