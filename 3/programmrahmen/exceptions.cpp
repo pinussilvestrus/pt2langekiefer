@@ -12,8 +12,12 @@
 std::tm stringToTime(std::string date)
 {
     std::tm t;
-    std::istringstream ss(date);
-    //ss >> strptime(date.c_str(), "%d.%m.%Y", &t);
+#if defined(__GNUC__) && (__GNUC__ < 5)
+	strptime(date.c_str(), "%d.%m.%Y", &t);
+#else
+	std::istringstream ss(date);
+	ss >> std::get_time(&t, "%d.%m.%Y");
+#endif
     
     if(t.tm_year < 105 || t.tm_year > 115)
         throw std::logic_error("Year should be between 2005 and 2015");
@@ -30,7 +34,7 @@ struct FormatException
 void parseLine(std::string line, int lineNum)
 {
 	
-	if (lineNum == 0){
+	if (lineNum < 2){
 		return; // don't parse header
 	}
     const std::string fieldNames[3] = { "Date", "Temperature", "Rainfall" };
@@ -44,7 +48,6 @@ void parseLine(std::string line, int lineNum)
 	std::string lineTemperature = line.substr(0,line.find(delimiter)); // second
 	line.erase(0,line.find(delimiter)+1);
 	std::string lineRainfall = line; // third
-	//std::cout << lineDate << " " << lineTemperature << " " << lineRainfall << "\n";
 	
 	FormatException excp;
 	excp.m_actLine = lineNum;
@@ -87,11 +90,22 @@ void writeOutFormatException(const FormatException & e)
 	// file.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
 	try {
 		std::fstream file("./exceptions.log",std::ios_base::app | std::ios::out);
-		file << e.m_actLine << " " << e.m_actFields << "\n";
+		file << "line " << e.m_actLine << ": " << e.m_actFields << "\n";
 		file.close();
 	}
     // todo 3.2d: catch ios_base::failure
 	catch (std::ios_base::failure e) {
+		std::cerr << "Exception opening/reading/closing file\n";
+	}
+}
+
+// clears the log file
+void clearFileFirst(){
+	try {
+		std::fstream file("./exceptions.log",std::ios::out);
+		file << "";
+		file.close();
+	} catch (std::ios_base::failure e) {
 		std::cerr << "Exception opening/reading/closing file\n";
 	}
 }
@@ -101,6 +115,8 @@ void checkData(std::string path)
 	int validLines = 0;
     int invalidLines = 0;
     std::ifstream file;
+	
+	clearFileFirst(); // clears the log file
     
     // todo 3.2a: open file + read each line + call parseLine function (catch ifstream::failure)
 	// file.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
@@ -108,7 +124,7 @@ void checkData(std::string path)
 		file.open(path);
 
 		std::string line;
-		int lineNumber = 0;
+		int lineNumber = 1;
 		while (std::getline(file,line)){
 			// todo 3.2c: read each line + call parseLine function (catch FormatException) + count valid + invalid lines
 			try {
