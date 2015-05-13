@@ -23,9 +23,7 @@ void ReplaceAll(std::wstring& str, const std::wstring& from, const std::wstring&
 
 //ToDo 3.1a - implement use std::transform()
 void caseConvert(std::wstring& str) {
-  //std::string out;
   std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))std::tolower);
-  //std::wcout << str << '\n';
 }
 
 //ToDo 3.1b - implement replacement for ä, ö, ü, ß with ae,oe,ue,ss
@@ -50,25 +48,24 @@ bool emailCheck(std::wstring mail, std::wstring firstname, std::wstring name, st
   int posDot = mail.find(L".");
   int posDotLast = mail.rfind(L".");
   int posAt = mail.find(L"@");
-  int diffName = posAt-posDot-1;
-  int diffCompany = posDotLast-posAt-1;
+  //int diffName = posAt-posDot-1;
+  //int diffCompany = posDotLast-posAt-1;
 
   std::wstring firstnameSub = mail.substr(0,posDot);
-  std::wstring nameSub = mail.substr(posDot+1,diffName);
-  std::wstring companySub = mail.substr(posAt+1,diffCompany);
+  //std::wstring nameSub = mail.substr(posDot+1,diffName);
+  //std::wstring companySub = mail.substr(posAt+1,diffCompany);
 
 while(a != 1 || b != 1 || c != 1){
-  if(firstnameSub.compare(firstname) == 0){
-      a = 1;
-    }else {
-      break;
-    }
-  if(nameSub.compare(name) == 0){
-      b = 1;
-    }else {
-      break;
-    }
-  if(companySub.compare(company) == 0){
+  if(mail.find(firstname) < posAt && mail.find(name) < posAt){
+    a = 1;
+    b = 1;
+  } else if(firstnameSub == firstname.substr(0,1) && mail.find(name) < posAt){
+    a = 1;
+    b = 1;
+  } else {
+    break;
+  }
+  if(mail.find(company) < posDotLast && mail.find(company) > posAt){
       c = 1;
     } else {
       break;
@@ -92,7 +89,5 @@ int main(int argc, char * argv[])
         }
         std::cout << emailCheck(dataset[i][0], dataset[i][1], dataset[i][2], dataset[i][3]) << std::endl;
     }
-
     return 0;
-
 }
