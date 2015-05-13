@@ -63,7 +63,7 @@ void parseLine(std::string line, int lineNum)
 	
 	/***** Temperature **/
 	try {
-		//std::stof(lineTemperature);
+		std::stof(lineTemperature);
 	} catch(std::invalid_argument e){
 		excp.m_actFields += fieldNames[1] + ",";
 		numOfFailures++;
@@ -72,7 +72,7 @@ void parseLine(std::string line, int lineNum)
 	/******* Rainfall **/
 	
 	try {
-		//std::stof(lineRainfall);
+		std::stof(lineRainfall);
 	} catch (std::invalid_argument e){
 		excp.m_actFields += fieldNames[2] + ",";
 		numOfFailures++;
