@@ -36,19 +36,40 @@ struct CommandLineParameter
 // ToDo 4.2a - Calculate and return the fibonacci number for the given input value
 int fibonacci(int number)
 {
-	return 0;
+	if (number <= 0){
+		return 0;
+	}
+
+	if (number==1) {
+		return 1;
+	}
+	else {
+		return fibonacci(number - 1) + fibonacci(number - 2); //recursive
+	}
 }
 
 // ToDo 4.2a - Calculate and return the centered triangular number for the given input value
 int centeredTriangular(int number)
 {
-	return 0;
+	if (number<0){
+		return 0;
+	}
+	
+	return ((3*number*number + 3*number + 2) / 2);
 }
 
 // ToDo 4.2a - Calculate and return the sum of i^exp for all i in [1..number]
 int powSum(int number, int exp)
 {
-	return 0;
+	if (number <= 0){
+		return 0;
+	}
+	
+	int sum = 0;
+	for (int i = 1; i <= number; i++){
+		sum+=i^exp;
+	}
+	return sum;
 }
 
 // ToDo 4.2c - Call each function inside the functions vector. Print the results via std::cout
