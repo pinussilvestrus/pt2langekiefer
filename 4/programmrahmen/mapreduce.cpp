@@ -193,18 +193,14 @@ void calculateDistancePerRoute(std::map<int, AirportInfo>& airportInfo)
 		AirportInfo ai = airportInfo[i];
 		std::vector<std::pair<int,int>> routes = ai.m_routes;
 		std::vector<std::pair<int,int>>::size_type j;
-		int sourceID = i;
 			for(j = 0; j < routes.size(); j++) {
-				float longSource = airportInfo[sourceID].pos[1];
-				float latSource = airportInfo[sourceID].pos[0];
+				float longSource = airportInfo[i].pos[1];
+				float latSource = airportInfo[i].pos[0];
 				int destID = ai.m_routes[j].first;
 				float longDest = airportInfo[destID].pos[1];
 				float latDest = airportInfo[destID].pos[0];
 				float distance = calculateDistanceBetween(latSource, longSource, latDest, longDest);
-				airportInfo[sourceID].m_routeLengths.push_back(distance);
-				//std::cout << distance << "\n";
-				//std::cout << ai.m_routeLengths[0] << "\n";
-				//std::cout << ai.m_routeLengths.size() <<"\n";
+				airportInfo[i].m_routeLengths.push_back(distance);
 			}
 	}
 	std::cout << "Calculate distance for each route" << std::endl;
@@ -219,10 +215,9 @@ void calculateAverageRouteDistances(std::map<int, AirportInfo>& airportInfo)
 		std::vector<float>::size_type j;
 			for(j = 0; j < routes.size(); j++) {
 				float sumUp, average;
-				//float init = 0;
-				sumUp = std::accumulate(airportInfo[i].m_routeLengths[0], airportInfo[i].m_routeLengths[routes.size()], 0.0f);
+				sumUp = std::accumulate(airportInfo[i].m_routeLengths.begin(), airportInfo[i].m_routeLengths.end(), 0.0f);
 				average = sumUp/routes.size();
-				//std::cout << routes.size();
+				airportInfo[i].m_averageRouteLength = average;
 			}
 	}
 	std::cout << "Calculate average distance for each source airport" << std::endl;
