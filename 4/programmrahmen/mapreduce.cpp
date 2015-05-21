@@ -11,8 +11,8 @@
 #include <algorithm>
 #include <numeric>
 
-// Calculates the distance between two points on earth specified by longitude/latitude. 
-// Function taken and adapted from http://www.codeproject.com/Articles/22488/Distance-using-Longitiude-and-latitude-using-c 
+// Calculates the distance between two points on earth specified by longitude/latitude.
+// Function taken and adapted from http://www.codeproject.com/Articles/22488/Distance-using-Longitiude-and-latitude-using-c
 float calculateDistanceBetween(float lat1, float long1, float lat2, float long2)
 {
 	//main code inside the class
@@ -27,7 +27,7 @@ float calculateDistanceBetween(float lat1, float long1, float lat2, float long2)
 
 	float aHarv = pow(sin(dLat / 2.0f), 2.0f) + cos(dlat1)*cos(dlat2)*pow(sin(dLong / 2), 2);
 	float cHarv = 2 * atan2(sqrt(aHarv), sqrt(1.0f - aHarv));
-	//earth's radius from wikipedia varies between 6,356.750 km — 6,378.135 km (˜3,949.901 — 3,963.189 miles)
+	//earth's radius from wikipedia varies between 6,356.750 km Â— 6,378.135 km (Â˜3,949.901 Â— 3,963.189 miles)
 	//The IUGG value for the equatorial radius of the Earth is 6378.137 km (3963.19 mile)
 	const float earth = 6378.137f;
 	return earth*cHarv;
@@ -35,7 +35,7 @@ float calculateDistanceBetween(float lat1, float long1, float lat2, float long2)
 
 struct AirportInfo
 {
-	std::string m_name; 
+	std::string m_name;
 	std::string m_city;
 	std::string m_country;
 	float pos[2]; // x: latitude, y: longitude
@@ -50,10 +50,10 @@ void importAirportData(char* path, std::map<int, AirportInfo>& airportInfo)
 	std::cout << "Importing airport data.." << std::endl;
 	std::ifstream file(path);
 	std::string field, line;
-	
+
 	int currentLineNum = 0;
 
-	while (std::getline(file, line)) 
+	while (std::getline(file, line))
 	{
 		std::istringstream linestream;
 		linestream.str(line);
@@ -61,7 +61,7 @@ void importAirportData(char* path, std::map<int, AirportInfo>& airportInfo)
 		int currentID = -1;
 		std::string result;
 		currentLineNum++;
-		
+
 		while (std::getline(linestream, field, ';'))
 		{
 			try
@@ -148,7 +148,7 @@ void importRoutesData(char* path, std::map<int, AirportInfo>& airportInfo)
 			catch (const std::invalid_argument&)
 			{
 				//std::cout << "Couldn't convert field " << currentLineNum << " correctly (invalid argument)!" << std::endl;
-				//std::cout << field << std::endl;
+				//std::cout << field << std::makeendl;
 			}
 			catch (const std::out_of_range&)
 			{
@@ -175,18 +175,56 @@ void importRoutesData(char* path, std::map<int, AirportInfo>& airportInfo)
 // ToDo 4.1a - remove all routes from AirportInfo::m_routes with at least one stop (so that only direct flights remain). Use std::remove_if().
 void removeNonDirectFlights(std::map<int, AirportInfo>& airportInfo)
 {
+	for(int i = 0; i < airportInfo.size(); i++){
+		AirportInfo ai = airportInfo[i];
+		std::vector<std::pair<int,int>> routes = ai.m_routes;
+		std::vector<std::pair<int,int>>::size_type j;
+			for(j = 0; j < routes.size(); j++) {
+			routes.erase(std::remove_if(routes.begin(), routes.end(), [](std::pair<int,int> i){ return i.second != 0;}), routes.end());
+			}
+	}
 	std::cout << "Remove non-direct flights (i.e., at least one stop)" << std::endl;
 }
 
 // ToDo 4.1b - For each route in AirportInfo::m_routes, calculate the distance between start and destination. Store the results in AirportInfo::m_routeLengths. Use std::transform() and calculateDistanceBetween().
 void calculateDistancePerRoute(std::map<int, AirportInfo>& airportInfo)
 {
+	for(int i = 0; i < airportInfo.size(); i++){
+		AirportInfo ai = airportInfo[i];
+		std::vector<std::pair<int,int>> routes = ai.m_routes;
+		std::vector<std::pair<int,int>>::size_type j;
+		int sourceID = i;
+			for(j = 0; j < routes.size(); j++) {
+				float longSource = airportInfo[sourceID].pos[1];
+				float latSource = airportInfo[sourceID].pos[0];
+				int destID = ai.m_routes[j].first;
+				float longDest = airportInfo[destID].pos[1];
+				float latDest = airportInfo[destID].pos[0];
+				float distance = calculateDistanceBetween(latSource, longSource, latDest, longDest);
+				airportInfo[sourceID].m_routeLengths.push_back(distance);
+				//std::cout << distance << "\n";
+				//std::cout << ai.m_routeLengths[0] << "\n";
+				//std::cout << ai.m_routeLengths.size() <<"\n";
+			}
+	}
 	std::cout << "Calculate distance for each route" << std::endl;
 }
 
 // ToDo 4.1c - Based on AirportInfo::m_routeLengths, calculate for each airport the average distance of outgoing routes. Store the results in AirportInfo::m_averageRouteLength. Use std::accumulate().
 void calculateAverageRouteDistances(std::map<int, AirportInfo>& airportInfo)
 {
+	for(int i = 0; i < airportInfo.size(); i++){
+		AirportInfo ai = airportInfo[i];
+		std::vector<float> routes = ai.m_routeLengths;
+		std::vector<float>::size_type j;
+			for(j = 0; j < routes.size(); j++) {
+				float sumUp, average;
+				//float init = 0;
+				sumUp = std::accumulate(airportInfo[i].m_routeLengths[0], airportInfo[i].m_routeLengths[routes.size()], 0.0f);
+				average = sumUp/routes.size();
+				//std::cout << routes.size();
+			}
+	}
 	std::cout << "Calculate average distance for each source airport" << std::endl;
 }
 
