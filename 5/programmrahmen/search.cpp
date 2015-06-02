@@ -76,9 +76,10 @@ void importRoutesData(char* path, std::vector<Route>& routes)
 int linearSearch(int destID, std::vector<Route>& routes, long long& numLookups)
 {
 	int numRoutes = 0;
-    std::vector<Route>::size_type route;
-    for (route=0; route <= routes.size(); route++) {
-        if (route.destinationId==destID) {
+    std::vector<Route>::size_type i;
+    for (i=0; i <= routes.size(); i++) {
+        numLookups++;
+        if (routes[i].destinationId==destID) {
             numRoutes++;
         }
     }
@@ -93,6 +94,14 @@ std::pair<long long, long long> evaluateLinearSearch(std::vector<Route>& routes)
 {
 	long long numLookups = 0;
 	long long duration = 0;
+    
+    for (int i = 1; i<=9541; i++) {
+        auto start = std::chrono::system_clock::now();
+        linearSearch(i, routes, numLookups);
+        auto end = std::chrono::system_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        duration += elapsed.count();
+    }
 	
 	return std::make_pair(numLookups, duration);
 }
