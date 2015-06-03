@@ -19,13 +19,20 @@ void printContainer(T& container)
 template<class T>
 void front_back_pairing(T& inContainer, T& outContainer)
 {
-     int i = inContainer.size();
-    //  while(i < 0){
+    int start = 0;
+    int i = inContainer.size();
     auto value = inContainer.end();
+    auto valueStart = inContainer.begin();
      for(int j = 0; j < i; j++){
-       *value--;
-         outContainer.push_back(*value);
-        //outContainer = outContainer + value;
+       if(start == 0){
+         outContainer.push_back(*valueStart);
+         *valueStart++;
+         start = 1;
+       }else{
+         *value--;
+           outContainer.push_back(*value);
+           start = 0;
+       }
      }
 }
 
@@ -33,19 +40,24 @@ void front_back_pairing(T& inContainer, T& outContainer)
 template<class T>
 void remove_duplicates(T& container)
 {
-    /**std::sort(container.begin(), container.end());
+    std::sort(container.begin(), container.end());
     auto last = std::unique(container.begin(), container.end());
-    container.erase(last, container.end());**/
-
-    for(int i = 1; i <= container.size(); i++){
+    container.erase(last, container.end());
+/**
+    int counter = 0;
+    for(int i = 0; i < container.size(); i++){
       auto value = container.begin()+i;
-      for(int j = 2; j <= container.size(); j++){
+      for(int j = 1; j < container.size(); j++){
         auto secondValue = container.begin()+j;
-        if(value == secondValue){
+        if(*value == *secondValue){
           container.erase(secondValue);
+          container.push_back(*secondValue);
+          counter++;
           }
       }
     }
+    int position = container.size();
+    container.erase(position-counter,position);**/
 }
 
 // ToDo 5.1c - Expand the given container by inserting the numerical differences of each element to its neighbors. Do *not* use the []-operator.
