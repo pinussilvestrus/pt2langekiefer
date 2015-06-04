@@ -64,7 +64,18 @@ void remove_duplicates(T& container)
 template<class T>
 void insert_differences(T& container)
 {
-
+  std::vector<int> vectorTwo = {};
+  auto value = container.begin();
+  auto valueSecond = container.begin()+1;
+  for(int i = 1; i < container.size(); i++){
+    int diff = std::abs(*value-*valueSecond);
+    vectorTwo.push_back(*value);
+    vectorTwo.push_back(diff);
+    *value++;
+    *valueSecond++;
+  }
+  vectorTwo.push_back(container.back());
+  container = vectorTwo;
 }
 
 void testFrontBackPairingFunctionality()
