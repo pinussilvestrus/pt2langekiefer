@@ -43,21 +43,6 @@ void remove_duplicates(T& container)
     std::sort(container.begin(), container.end());
     auto last = std::unique(container.begin(), container.end());
     container.erase(last, container.end());
-/**
-    int counter = 0;
-    for(int i = 0; i < container.size(); i++){
-      auto value = container.begin()+i;
-      for(int j = 1; j < container.size(); j++){
-        auto secondValue = container.begin()+j;
-        if(*value == *secondValue){
-          container.erase(secondValue);
-          container.push_back(*secondValue);
-          counter++;
-          }
-      }
-    }
-    int position = container.size();
-    container.erase(position-counter,position);**/
 }
 
 // ToDo 5.1c - Expand the given container by inserting the numerical differences of each element to its neighbors. Do *not* use the []-operator.
