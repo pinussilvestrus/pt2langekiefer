@@ -22,18 +22,27 @@ void merge(T leftIt, T midIt, T rightIt)
 
 	assert(leftIt <= midIt && midIt <= rightIt);
 
-	std::vector<typename T::value_type> mergedValues(rightIt - leftIt);
+    T temp[10]; // temporary storage
+    T a = leftIt, b=midIt;
+    while (a < midIt && b < rightIt) {
+        if (*a < *b) *temp++ = *a++;
+        else *temp++ = *b++;
+    }
+    
+    while (a < midIt) *temp++ = *a++;
+    while (b < rightIt) *temp++ = *b++;
+    while (leftIt < rightIt) *leftIt++ = *temp++;
 }
 
 // ToDo 5.3 - Sort the given container using merge sort.
 template<class T>
 void mergeSort(T leftIt, T rightIt)
 {
-	if(leftIt < rightIt){
-		int mid = (*leftIt + *rightIt)/2; //ist nen string der noch in int konvertiert werden müsste
-		mergeSort(leftIt,mid);
-		mergeSort(mid+1,rightIt);
-		merge(lefIt,mid,rightIt);
+	if(*leftIt < *rightIt){
+		auto midIt = (*leftIt + *rightIt)/2;
+		mergeSort(leftIt,midIt);
+		mergeSort(midIt,rightIt);
+		merge(leftIt,midIt,rightIt);
 	}
 	assert(leftIt < rightIt);
 }
