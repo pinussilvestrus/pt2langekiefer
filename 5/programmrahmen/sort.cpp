@@ -19,6 +19,7 @@ void printContainer(T& container)
 template<class T>
 void merge(T leftIt, T midIt, T rightIt)
 {
+
 	assert(leftIt <= midIt && midIt <= rightIt);
 
 	std::vector<typename T::value_type> mergedValues(rightIt - leftIt);
@@ -28,6 +29,12 @@ void merge(T leftIt, T midIt, T rightIt)
 template<class T>
 void mergeSort(T leftIt, T rightIt)
 {
+	if(leftIt < rightIt){
+		int mid = (*leftIt + *rightIt)/2; //ist nen string der noch in int konvertiert werden müsste
+		mergeSort(leftIt,mid);
+		mergeSort(mid+1,rightIt);
+		merge(lefIt,mid,rightIt);
+	}
 	assert(leftIt < rightIt);
 }
 
