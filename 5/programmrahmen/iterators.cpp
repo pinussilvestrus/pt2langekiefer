@@ -52,14 +52,18 @@ void insert_differences(T& container)
   std::vector<int> vectorTwo = {};
   auto value = container.begin();
   auto valueSecond = container.begin()+1;
+  vectorTwo.push_back(container.back()-container.front());
   for(int i = 1; i < container.size(); i++){
-    int diff = std::abs(*value-*valueSecond);
-    vectorTwo.push_back(*value);
+      vectorTwo.push_back(*value);
+    int diff = *valueSecond-*value;
     vectorTwo.push_back(diff);
+    int diffTwo = *value-*valueSecond;
+    vectorTwo.push_back(diffTwo);
     *value++;
     *valueSecond++;
   }
   vectorTwo.push_back(container.back());
+  vectorTwo.push_back(container.front()-container.back());
   container = vectorTwo;
 }
 
