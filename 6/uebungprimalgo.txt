@@ -1,0 +1,35 @@
+Übung (Prim.-Alg.):
+Graph G wird durch Tabelle konstruiert
+Table T[i][j]:Gewichte (NxN,20x20)
+
+V: vector<Vertex> V{N};
+E: vector<Edge> E;
+
+G: void generateGraph(N,V,E) //overrides V and E
+
+for (i=V.size(); i>0; i--){
+	... //minimum element
+	... //parent!=undefined?
+	... //Adj 
+}
+
+struct Vertex{
+	vertex(int i): index(i), Key(max_key), parent(undef) {..}
+	int index;
+	int key;
+	int parent_key;
+
+	static const int max_key = numeric_limits<int>::max(); //konstante
+	static const int undef = -1;
+	 
+
+############
+generateGraph:
+
+=> E = {e0,e1,....} ei:Edge (Knoten v1,Knoten v2,weight w) | i<j, 
+w!=undef.
+=> V={v0, ....., vn-1}, vi:Vertex(index, Key, parent_index)
+############
+
+
+
