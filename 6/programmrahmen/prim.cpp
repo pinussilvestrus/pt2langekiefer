@@ -119,31 +119,31 @@ void createGraph(std::vector<Edge> & E, std::vector<Vertex> & V)
 
     // - every node should be stored only once
     // - no loops on nodes (edges between single nodes, i.e., edges with weight < 0)
-    int number = 0;
     int size = V.size();
     V.clear();
     for(int i = 0; i < size; i++){
       for(int j = 0; j < size; j++){
         if(i == j){
-          std::cout << "Should have, would have, could have" << "\n";
           V.push_back(Vertex(i));
         }else if(weight(i,j) < 0){
-          std::cout << "Weight: " << weight(i,j) << " " << "(" << i << "," << j << ")" << "\n";
+          //Do nothing
         }else if(weight(i,j) > 0){
             E.push_back(Edge(i,j));
           for(int k = 0; k < E.size(); k++){
             if(j == E[k].vi1 && i == E[k].vi2){
-              number++;
-              std::cout << "Weight: " << weight(i,j) << " " << "(" << i << "," << j << ")" << "\n";
               E.pop_back();
             }
         }
       }
     }
+  }
+
+  for(int k = 0; k < E.size(); k++){
+    std::cout << "(" << E[k].vi1 << "," << E[k].vi2 << ")" << "\n";
     }
+
 std::cout << "I'm done and V is size of " << V.size() << " and E is size of " << E.size();
 // - any edge of nodes a and b is bidirectional, so edge b to a is not required (no duplicates)
-std::cout << "\n" << number << "\n";
 }
 
 // return added weights of a list of edges
@@ -154,7 +154,7 @@ int totalWeight(const std::vector<Edge> & E)
     for(int i = 0; i < E.size(); i++){
         W += E[i].weight;
       }
-      std::cout << W;
+      std::cout << "\n" << W;
     return W;
 }
 
@@ -165,11 +165,19 @@ void prim()
 {
     auto V = std::vector<Vertex>(N);
     auto E = std::vector<Edge>{ };
+
+    // generate city graph based on distance table
     createGraph(E, V);
     totalWeight(E);
-    // generate city graph based on distance table
 
     // ToDo: Exercise 6.1.c - implement prim algorithm
+    for(int i = 0; i < N-1; i++){
+      for(int j = 0; j < N-1; j++){
+          while(E[j].vi1 == i){
+            //think of something
+        }
+      }
+    }
 }
 
 
