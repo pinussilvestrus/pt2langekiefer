@@ -56,7 +56,9 @@ void ToH(const int n, const int a, const int b, const int c, int & moves)
         // move disc from a directly to c (no auxiliary stapel required)
         moves++;
         print();
-        
+
+        //todo: move last element from old to new, sort both, so that biggest is on first
+
         std::cout << "Move " << (char)('A' + a) << " -> " << (char)('A' + c) << std::endl;
         getchar();
     }
