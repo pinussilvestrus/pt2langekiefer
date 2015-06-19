@@ -19,16 +19,16 @@ auto C = std::vector<int>();
 void printDiscSet(std::vector<int> stapel) {
     std::cout << std::endl << std::endl;
     for(auto i = stapel.size() - 1; stapel.size() > i; --i) { // iterate backwards so that the biggest disc is at the bottom
-        if (stapel[i] == 1) std::cout << "     ###      " << std::endl;
-        if (stapel[i] == 2) std::cout << "    #####     " << std::endl;
-        if (stapel[i] == 3) std::cout << "   #######    " << std::endl;
-        if (stapel[i] == 4) std::cout << "  #########   " << std::endl;
+        if (stapel[i] == 1) std::cout << "     ███      " << std::endl;
+        if (stapel[i] == 2) std::cout << "    █████     " << std::endl;
+        if (stapel[i] == 3) std::cout << "   ███████    " << std::endl;
+        if (stapel[i] == 4) std::cout << "  █████████   " << std::endl;
     }
 }
 
 /** prints the plateau with a given letter in the middle**/
 void printPlateau(const char letter) {
-    std::cout << "------" << letter << "------" << std::endl; // my terminal does not support extended ascii :(
+    std::cout << "█████ " << letter << " █████" << std::endl;
 }
 
 
