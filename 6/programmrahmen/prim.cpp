@@ -171,13 +171,24 @@ void prim()
     totalWeight(E);
 
     // ToDo: Exercise 6.1.c - implement prim algorithm
-    for(int i = 0; i < N-1; i++){
-      for(int j = 0; j < N-1; j++){
-          while(E[j].vi1 == i){
-            //think of something
-        }
-      }
+    for (auto v : V) {
+        v.key = Vertex::undef;
+        v.parent_index = Vertex::undef;
     }
+    
+    // choose one element from V randomly => r
+    // r.key = 0;
+    auto Q = V;
+    auto A = std::vector<Edge>{ };
+    /* while Q.size > 0: {
+    auto u = lowest key in Q (vertex in Q with lost key)
+    remove u from Q, erase or something
+    if (u.parent != Vertex::undef) A.push_back(Edge(u.index, u.parent_index));
+     get Adjacency from u: for each e in E: e.contains(u.index)
+     ...
+     } */
+    
+    
 }
 
 
