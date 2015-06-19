@@ -15,6 +15,23 @@ auto B = std::vector<int>();
 auto C = std::vector<int>();
 
 
+/** prints the discs of a stapel **/
+void printDiscSet(std::vector<int> stapel) {
+    std::cout << std::endl << std::endl;
+    for(auto i = stapel.size() - 1; stapel.size() > i; --i) { // iterate backwards so that the biggest disc is at the bottom
+        if (stapel[i] == 1) std::cout << "     ###      " << std::endl;
+        if (stapel[i] == 2) std::cout << "    #####     " << std::endl;
+        if (stapel[i] == 3) std::cout << "   #######    " << std::endl;
+        if (stapel[i] == 4) std::cout << "  #########   " << std::endl;
+    }
+}
+
+/** prints the plateau with a given letter in the middle**/
+void printPlateau(const char letter) {
+    std::cout << "------" << letter << "------" << std::endl; // my terminal does not support extended ascii :(
+}
+
+
 void print()
 {
     #ifdef _WIN32
@@ -26,39 +43,21 @@ void print()
     //TODO 6.2
 	//print state
     
-    // check which discs A,B and C has, print the specific discs above the plateau (biggest at the bottom)
     
+    printDiscSet(A);
     
-    for(auto i = A.size() - 1; A.size() > i; --i) { // iterate backwards so that the biggest disc is at the bottom
-        if (A[i] == 1) std::cout << std::endl << "     ###      " << std::endl;
-        if (A[i] == 2) std::cout << std::endl << "    #####     " << std::endl;
-        if (A[i] == 3) std::cout << std::endl << "   #######    " << std::endl;
-        if (A[i] == 4) std::cout << std::endl << "  #########   " << std::endl;
-    }
+    printPlateau('A');
     
-    // plateau for A
-    std::cout << "######A#######" << std::endl; // my terminal does not support extended ascii :(
+    printDiscSet(B);
     
-    for(auto i = B.size() - 1; B.size() > i; --i) { // iterate backwards so that the biggest disc is at the bottom
-        if (B[i] == 1) std::cout << std::endl << "     ###     " << std::endl;
-        if (B[i] == 2) std::cout << std::endl << "    #####    " << std::endl;
-        if (B[i] == 3) std::cout << std::endl << "   #######   " << std::endl;
-        if (B[i] == 4) std::cout << std::endl << "  #########  " << std::endl;
-    }
-    
-    std::cout << "######B#######" << std::endl;
+    printPlateau('B');
 
+    printDiscSet(C);
     
-    for(auto i = C.size() - 1; C.size() > i; --i) { // iterate backwards so that the biggest disc is at the bottom
-        if (C[i] == 1) std::cout << std::endl << "     ###     " << std::endl;
-        if (C[i] == 2) std::cout << std::endl << "    #####    " << std::endl;
-        if (C[i] == 3) std::cout << std::endl << "   #######   " << std::endl;
-        if (C[i] == 4) std::cout << std::endl << "  #########  " << std::endl;
-    }
-    
-    std::cout << "######C#######" << std::endl;
+    printPlateau('C');
     
     //todo: print all next to each other
+    
     
     
 }
@@ -69,10 +68,7 @@ void ToH(const int n, const int a, const int b, const int c, int & moves)
 	//Implement Towers of Hanoi and print
     
     if (n == 1) {
-        // move disc from a directly to c (no auxiliary stapel required)
         moves++;
-
-        //todo: move last element from old to new, sort both, so that biggest is on first
         
         char oldPlat = (char)('A' + a);
         char newPlat = (char)('A' + c);
@@ -127,11 +123,13 @@ int main(int argc, char ** argv)
     int moves = 0;
 
     for (int i = N; i > 0; --i)
-        A.push_back(i); // A = {4,3,2,1} => A have all {N=4} discs
+        A.push_back(i);
 
 	print();
+    std::cout << "start!" << std::endl;
 	getchar();
     ToH(N, 0, 1, 2, moves);
+    std::cout << "finish!" << std::endl;
     std::cout << "minimal number of moves: " << moves << std::endl;
 
 	getchar();
