@@ -79,13 +79,15 @@ void schedule(const std::vector<Interval> & intervals)
 	//implement greedy scheduling
 	
 	// power point page 37
+    
+    auto first = sorted[0];
 	
-	schedule.push_back(sorted.begin()); // insert first interval from sorted to new vector
+    scheduled.push_back(sorted[0]); // insert first interval from sorted to new vector
 	int endLast = sorted[0].end;
 	std::vector<Interval>::size_type i;
 	for (i=1; i<= sorted.size(); i++) { // start from second element
 		if (sorted[i].start >= endLast) {
-			schedule.push_back(&sorted[i]);
+			scheduled.push_back(sorted[i]);
 			endLast = sorted[i].end;
 		}
 	}
