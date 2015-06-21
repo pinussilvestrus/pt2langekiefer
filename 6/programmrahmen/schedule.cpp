@@ -49,6 +49,11 @@ void randomize(std::vector<Interval> & intervals)
     }
 }
 
+/** comparing function for sorting the intervals in a vector from their given start-value **/
+bool compareFunc (Interval i1, Interval i2){
+	return i1.start < i2.start;
+}
+
 
 void schedule(const std::vector<Interval> & intervals)
 {
@@ -57,9 +62,12 @@ void schedule(const std::vector<Interval> & intervals)
     std::cout << std::endl << "intervals (randomized):" << std::endl << intervals;
 
     // ToDo: Exercise 6.3 - sort and schedule intervals
+	
 
 	auto sorted = intervals;
     // sort intervals
+	
+	std::sort(sorted.begin(), sorted.end(), compareFunc);
 
     std::cout << std::endl << "intervals (sorted):" << std::endl << sorted;
 
@@ -69,6 +77,18 @@ void schedule(const std::vector<Interval> & intervals)
     
     //ToDo 6.3
 	//implement greedy scheduling
+	
+	// power point page 37
+	
+	schedule.push_back(sorted[0]); // insert first interval from sorted to new vector
+	int endLast = sorted[0].end;
+	std::vector<Route>::size_type i;
+	for (i=1; i<= sorted.size(); i++) { // start from second element
+		if (sorted[i].start >= endLast) {
+			schedule.push_back(sorted[i]);
+			endLast = sorted[i].end;
+		}
+	}
 
     std::cout << std::endl << "intervals (scheduled, " << scheduled.size() << " of " << sorted.size() << " possible)" 
         << std::endl << scheduled << std::endl;
