@@ -80,12 +80,12 @@ void schedule(const std::vector<Interval> & intervals)
 	
 	// power point page 37
 	
-	schedule.push_back(sorted[0]); // insert first interval from sorted to new vector
+	schedule.push_back(sorted.begin()); // insert first interval from sorted to new vector
 	int endLast = sorted[0].end;
-	std::vector<Route>::size_type i;
+	std::vector<Interval>::size_type i;
 	for (i=1; i<= sorted.size(); i++) { // start from second element
 		if (sorted[i].start >= endLast) {
-			schedule.push_back(sorted[i]);
+			schedule.push_back(&sorted[i]);
 			endLast = sorted[i].end;
 		}
 	}
