@@ -158,6 +158,15 @@ int totalWeight(const std::vector<Edge> & E)
     return W;
 }
 
+void adjacency(std::vector<Edge> & E, int & V, std::vector<Vertex> & T){
+T.clear();
+  for(int i = 0; i < E.size(); i++){
+    if(E[i].vi1 == V){
+      T.push_back(E[i].vi2);
+    }
+  }
+}
+
 
 bool printed = false;
 
@@ -165,32 +174,51 @@ void prim()
 {
     auto V = std::vector<Vertex>(N);
     auto E = std::vector<Edge>{ };
+    auto T = std::vector<Vertex>{ };
 
     // generate city graph based on distance table
     createGraph(E, V);
     totalWeight(E);
 
-    // ToDo: Exercise 6.1.c - implement prim algorithm
-    for (auto v : V) {
-        v.key = Vertex::undef;
-        v.parent_index = Vertex::undef;
+
+    for(int t = V.size()-1; t >= 0; t--){
+      V[t].key = Vertex::undef;
+      V[t].parent_index = Vertex::undef;
     }
 
-    // choose one element from V randomly => r
-    // r.key = 0;
+    int randomIndex = rand() % V.size();
+    V[randomIndex].key = 0;
+
     auto Q = V;
     auto A = std::vector<Edge>{ };
     while(Q.size() > 0){
-      auto u = std::min_elemnt(Q.begin(), Q.end());//lowest key in Q (vertex in Q with lost key)
-    //  remove u from Q, erase or something
-    //  if (u.parent != Vertex::undef) A.push_back(Edge(u.index, u.parent_index));
-    //  get Adjacency from u: for each e in E: e.contains(u.index)
-    //  ...
-     }
-
-
+      int smallest = 2147483647;
+      int erase = 0;
+      int pos = 0;
+      for (int x = 0; x < Q.size(); x++) {
+          if (Q[x].key < smallest) {
+            smallest = Q[x].key;
+            pos = x;
+          }
+          Q.erase(Q.begin()+pos);
+        }
+        auto u = Q[pos];
+    if(u.parent_index != Vertex::undef){
+      A.push_back(Edge(u.index, u.parent_index));
+    }
+    for(int i = 0; i < Q.size(); i++){
+      adjacency(E,u.index,T);
+        for(int j = 0; j < T.size(); j++){
+      if(weight(u.index,T[j].index) < T[j].key){
+        T[j].parent_index = u.index;
+        T[j].key = weight(u.index,T[j].index);
+        A.push_back(Edge(u.index, T[j].index));
+        }
+      }
+    }
+  }
+  totalWeight(A);
 }
-
 
 int main(int argc, char** argv)
 {
