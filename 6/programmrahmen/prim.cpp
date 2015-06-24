@@ -159,11 +159,20 @@ int totalWeight(const std::vector<Edge> & E)
 
 void adjacency(std::vector<Edge> & E, int & V, std::vector<Vertex> & T){
 T.clear();
-  for(int i = 0; i < E.size(); i++){
+  int size = E.size();
+  for(int i = 0; i < size; i++){
     if(E[i].vi2 == V){
       T.push_back(E[i].vi1);
-	  std::cout << "\n" << E[i].vi2 << "," << E[i].vi1 << "\n";
-    }
+    //  E.erase(E.begin()+i);
+    //  size--;
+	  std::cout << "\n" << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
+  }
+  if(E[i].vi1 == V){
+    T.push_back(E[i].vi2);
+    //E.erase(E.begin()+i);
+  //  size--;
+    std::cout << "\n" << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
+  }
   }
 }
 
@@ -191,8 +200,8 @@ void prim()
 
     auto Q = V;
     auto A = std::vector<Edge>{ };
+    int smallest = 2147483647;
     while(Q.size() > 0){
-      int smallest = 2147483647;
       int erase = 0;
       int pos = 0;
       for (int x = 0; x < Q.size(); x++) {
@@ -211,23 +220,17 @@ void prim()
 			adjacency(E,u.index,T);
         for(int j = 0; j < T.size(); j++){
 			if(weight(u.index,T[j].index) < T[j].key){
-				T[j].parent_index = u.index;
-				T[j].key = weight(u.index,T[j].index);
+				u.parent_index = T[j].index;
+				u.key = weight(u.index,T[j].index);
 				A.push_back(Edge(u.index, T[j].index));
 		//	}
-		}	
+		}
     }
   }
   std::cout << "---" << "\n";
   totalWeight(A);
   std::cout << "\n" << "---" << "\n";
   std::cout << "\n" << A.size() << "\n";
-  std::cout << "\n" << A[0].vi1 << "," << A[0].vi2 << "\n";
-  std::cout << "\n" << A[1].vi1 << "," << A[1].vi2 << "\n";
-  std::cout << "\n" << A[2].vi1 << "," << A[2].vi2 << "\n";
-  std::cout << "\n" << A[3].vi1 << "," << A[3].vi2 << "\n";
-  std::cout << "\n" << A[4].vi1 << "," << A[4].vi2 << "\n";
-  std::cout << "\n" << A[5].vi1 << "," << A[5].vi2 << "\n";
 }
 
 int main(int argc, char** argv)
