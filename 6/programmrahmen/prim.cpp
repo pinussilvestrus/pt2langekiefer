@@ -162,23 +162,34 @@ T.clear();
   int size = E.size();
   int indicator = 0;
   for(int i = 0; i < size; i++){
-    if(E[i].vi2 == V){
+   /** if(E[i].vi2 == V){
       T.push_back(E[i].vi1);
     //  T[indicator].key = weight(E[i].vi1, E[i].vi2);
     //  indicator++;
     //  E.erase(E.begin()+i);
     //  size--;
 	//  std::cout << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
-  }
+  }**/
   if(E[i].vi1 == V){
     T.push_back(E[i].vi2);
    // T[indicator].key = weight(E[i].vi1, E[i].vi2);
    //   indicator++;
-    //E.erase(E.begin()+i);
-  //  size--;
-  //  std::cout << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
+   // E.erase(E.begin()+i);
+   // size--;
+   std::cout << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
   }
   }
+}
+
+void eraseEdge(std::vector<Edge> & E, int & vi1, int & vi2){
+    for(int i = 0; i < E.size(); i++){
+        if(E[i].vi1 == vi1 && E[i].vi2 == vi2){
+            E.erase(E.begin()+i);
+        }
+        if(E[i].vi2 == vi2 && E[i].vi1 == vi1){
+            E.erase(E.begin()+i);
+        }
+    }
 }
 
 
@@ -201,12 +212,13 @@ void prim()
     }
 
     int randomIndex = rand() % V.size();
-    V[randomIndex].key = 0;
+    V[randomIndex].key = 0;    
+    std::cout << "\n" << "The random one is " << V[randomIndex].index << "\n";  
 
     auto Q = V;
     auto A = std::vector<Edge>{ };
-    int smallest = Q[0].key;
-    while(Q.size() > 0){
+    while(Q.size()-1 > 0){
+      int smallest = Vertex::max_key;
       int erase = 0;
       int pos = 0;
       for (int x = 0; x < Q.size(); x++) {
@@ -219,24 +231,32 @@ void prim()
         //std::cout << Q.size();
         //std::cout << Q.size();
         auto u = Q[pos];
+        std::cout << u.index << "," << u.key << "\n";
         Q.erase(Q.begin()+pos);
-        std::cout << Q[pos].index;
+        //std::cout << Q[pos].index;
 		std::cout << "The index of u is " << u.index << "\n";
 		if(u.parent_index != Vertex::undef){
 			A.push_back(Edge(u.index, u.parent_index));
 		}
-		//for(int i = 0; i < Q.size(); i++){
 			adjacency(E,u.index,T);
         int indicator = 0;
         for(int j = 0; j < T.size(); j++){
+        if(u.key == 0){
+            if(weight(u.index,T[j].index) < u.key){
+				T[j].parent_index = u.index;
+				T[j].key = weight(u.index,T[j].index);
+                indicator = j;
+        }
+        }else{
 			if(weight(u.index,T[j].index) < T[j].key){
 				T[j].parent_index = u.index;
 				T[j].key = weight(u.index,T[j].index);
                 indicator = j;
-		//	}
+            }
 		}
     }
     A.push_back(Edge(u.index, T[indicator].index));
+    eraseEdge(E,u.index,T[indicator].index);
     std::cout << u.index << "," << T[indicator].index << " " << weight(u.index,T[indicator].index) << "\n";
   }
  std::cout << "---" << "\n";
