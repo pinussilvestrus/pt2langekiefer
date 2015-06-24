@@ -17,12 +17,12 @@ static const auto weights_table = std::array<int, N * N>{ {
      5,  4,  4,  5,  2, -1 } };
 //*/
 
-/*
+///*
 // test data: city distances
 // vertices are cities
 // edges denote city connections
 // weights denote travel distance
-
+/*
 static const auto N = static_cast<size_t>(20);
 // test data: city distances
 static const auto weights_table = std::array<int, N * N>{ {
@@ -137,11 +137,11 @@ void createGraph(std::vector<Edge> & E, std::vector<Vertex> & V)
     }
   }
 
-  for(int k = 0; k < E.size(); k++){
+  /**for(int k = 0; k < E.size(); k++){
     std::cout << "(" << E[k].vi1 << "," << E[k].vi2 << ")" << "\n";
     }
-
-std::cout << "I'm done and V is size of " << V.size() << " and E is size of " << E.size();
+**/
+//std::cout << "I'm done and V is size of " << V.size() << " and E is size of " << E.size();
 // - any edge of nodes a and b is bidirectional, so edge b to a is not required (no duplicates)
 }
 
@@ -149,12 +149,12 @@ std::cout << "I'm done and V is size of " << V.size() << " and E is size of " <<
 int totalWeight(const std::vector<Edge> & E)
 {
     // ToDo: Exercise 6.1.b - total weight accumulated over the given edges
-    int W = 0;
+    int w = 0;
     for(int i = 0; i < E.size(); i++){
-        W += E[i].weight;
+        w += E[i].weight;
       }
-      std::cout << "\n" << W;
-    return W;
+    //  std::cout << "\n" << w;
+    return w;
 }
 
 void adjacency(std::vector<Edge> & E, int & V, std::vector<Vertex> & T){
@@ -162,21 +162,9 @@ T.clear();
   int size = E.size();
   int indicator = 0;
   for(int i = 0; i < size; i++){
-   /** if(E[i].vi2 == V){
-      T.push_back(E[i].vi1);
-    //  T[indicator].key = weight(E[i].vi1, E[i].vi2);
-    //  indicator++;
-    //  E.erase(E.begin()+i);
-    //  size--;
-	//  std::cout << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
-  }**/
   if(E[i].vi1 == V){
     T.push_back(E[i].vi2);
-   // T[indicator].key = weight(E[i].vi1, E[i].vi2);
-   //   indicator++;
-   // E.erase(E.begin()+i);
-   // size--;
-   std::cout << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
+   //std::cout << E[i].vi2 << "," << E[i].vi1 << " "<< "\n";
   }
   }
 }
@@ -193,7 +181,7 @@ void eraseEdge(std::vector<Edge> & E, int & vi1, int & vi2){
 }
 
 
-bool printed = false;
+bool printed = true;
 
 void prim()
 {
@@ -203,17 +191,15 @@ void prim()
 
     // generate city graph based on distance table
     createGraph(E, V);
-    totalWeight(E);
-
 
     for(int t = V.size()-1; t >= 0; t--){
       V[t].key = Vertex::max_key;
       V[t].parent_index = Vertex::undef;
     }
 
-    int randomIndex = rand() % V.size();
-    V[randomIndex].key = 0;    
-    std::cout << "\n" << "The random one is " << V[randomIndex].index << "\n";  
+    //int randomIndex = rand() % V.size();
+    //V[randomIndex].key = 0;
+	V[0].key = 0;
 
     auto Q = V;
     auto A = std::vector<Edge>{ };
@@ -225,44 +211,34 @@ void prim()
           if (Q[x].key < smallest) {
             smallest = Q[x].key;
             pos = x;
-           // std::cout << "\n" << pos << Q[pos].index << " HERE " << "\n";
           }
         }
-        //std::cout << Q.size();
-        //std::cout << Q.size();
         auto u = Q[pos];
-        std::cout << u.index << "," << u.key << "\n";
         Q.erase(Q.begin()+pos);
-        //std::cout << Q[pos].index;
-		std::cout << "The index of u is " << u.index << "\n";
-		if(u.parent_index != Vertex::undef){
+
+	if(u.parent_index != Vertex::undef){
 			A.push_back(Edge(u.index, u.parent_index));
 		}
-			adjacency(E,u.index,T);
-        int indicator = 0;
-        for(int j = 0; j < T.size(); j++){
-        if(u.key == 0){
-            if(weight(u.index,T[j].index) < u.key){
-				T[j].parent_index = u.index;
-				T[j].key = weight(u.index,T[j].index);
+	adjacency(E,u.index,T);
+	int smallestEdge = Vertex::max_key;
+	int indicator = 0;
+		for(int j = 0; j < T.size(); j++){
+			if(weight(u.index,T[j].index) < smallestEdge){
+				smallestEdge = weight(u.index,T[j].index);
                 indicator = j;
         }
-        }else{
-			if(weight(u.index,T[j].index) < T[j].key){
-				T[j].parent_index = u.index;
-				T[j].key = weight(u.index,T[j].index);
-                indicator = j;
-            }
-		}
-    }
-    A.push_back(Edge(u.index, T[indicator].index));
-    eraseEdge(E,u.index,T[indicator].index);
-    std::cout << u.index << "," << T[indicator].index << " " << weight(u.index,T[indicator].index) << "\n";
   }
- std::cout << "---" << "\n";
- totalWeight(A);
- std::cout << "\n" << "---" << "\n";
- std::cout << "\n" << A.size() << "\n";
+  T[indicator].parent_index = u.index;
+  T[indicator].key = weight(u.index,T[indicator].index);
+  A.push_back(Edge(u.index, T[indicator].index));
+  eraseEdge(E,u.index,T[indicator].index);
+  }
+  std::cout << "Minimal graph: E = {";
+	for (int i = 0; i < A.size(); i++){
+		std::cout << "(" << A[i].vi1 << "," << A[i].vi2 << ")" << ",";
+	}
+	std::cout << "\b" << "}";
+	std::cout << "\n" << "Minimal costs: " << totalWeight(A) << "\n";
 }
 
 int main(int argc, char** argv)
