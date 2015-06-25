@@ -181,7 +181,7 @@ void eraseEdge(std::vector<Edge> & E, int & vi1, int & vi2){
 }
 
 
-bool printed = true;
+bool printed = false;
 
 void prim()
 {

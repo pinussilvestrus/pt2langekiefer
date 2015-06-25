@@ -34,6 +34,26 @@ std::ostream & operator<<(std::ostream & os, const std::vector<Interval> & I)
 	return os;
 }
 
+//function to print the intervals
+void printInterval(std::vector<Interval> & intervals){
+int maximum = MaxEnd;
+	for(int i = 0; i < intervals.size(); i++){
+		std::cout << "#" << i << "	|";
+		for(int j = 0; j < maximum; j++){
+			if(intervals[i].start == j){
+				for(int k = 0; k < (intervals[i].end-intervals[i].start); k++){
+					std::cout << "█";
+				}
+				maximum = maximum - (intervals[i].end-intervals[i].start);
+			}else{
+				std::cout << ".";
+			}
+	}
+	maximum = MaxEnd;
+	std::cout << "|" << std::endl;
+}
+}
+
 //creates data
 void randomize(std::vector<Interval> & intervals)
 {
@@ -44,7 +64,6 @@ void randomize(std::vector<Interval> & intervals)
     {
         int duration = rand() % MaxDuration + 1;
         int start = rand() % (MaxEnd - duration);
-
         intervals.push_back(Interval(i, start, duration));
     }
 }
@@ -60,16 +79,17 @@ void schedule(const std::vector<Interval> & intervals)
     // unsorted
 
     std::cout << std::endl << "intervals (randomized):" << std::endl << intervals;
-
     // ToDo: Exercise 6.3 - sort and schedule intervals
 	
 
 	auto sorted = intervals;
+	printInterval(sorted);
     // sort intervals
 	
 	std::sort(sorted.begin(), sorted.end(), compareFunc);
 
     std::cout << std::endl << "intervals (sorted):" << std::endl << sorted;
+	printInterval(sorted);
 
     // scheduled
     
@@ -93,7 +113,8 @@ void schedule(const std::vector<Interval> & intervals)
 	}
 
     std::cout << std::endl << "intervals (scheduled, " << scheduled.size() << " of " << sorted.size() << " possible)" 
-        << std::endl << scheduled << std::endl;
+        << std::endl << scheduled;
+	printInterval(scheduled);
 }
 
 int main(int argc, char** argv) {
