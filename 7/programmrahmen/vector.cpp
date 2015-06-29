@@ -82,8 +82,45 @@ class Vector3d {
 		}
 	}
 	
+	Vector3d& operator= (Vector3d &v) { // asignment
+		
+		x_ = v[0];
+		y_ = v[1];
+		z_ = v[2];
+	}
+	
+	Vector3d& operator* (double scala) { // scalar multiplication
+		
+		x_ *= scala;
+		y_ *= scala;
+		z_ *= scala;
+	}
+	
+	Vector3d& operator/ (double scala) {
+		x_ /= scala;
+		y_ /= scala;
+		z_ /= scala;
+	}
+	
 	Vector3d() : x_{0}, y_{0}, z_{0} {}
-	Vector3d(double x, double y, double z): x_{x}, y_{y}, z_{z} {} //ctor with specific values
+	Vector3d(double x, double y, double z): x_{x}, y_{y}, z_{z} {} //ctor with specific values (as list)
+	
+	double dot(Vector3d& v2)
+	{
+    return x_*v2[0] + y_*v2[1] + z_*v2[2];
+	}
+
+	double length()
+	{
+    return std::sqrt(dot(*this));
+	}
+
+	void normalize()
+	{
+    double len = length();
+	*this = *this/len;
+	}
+
 	
 };
 
@@ -109,14 +146,14 @@ void test() {
     std::cout << "(2.0,3.0,4.0):\t" << v2 << std::endl; 
     assert(v2[0]==2.0 && v2[1]==3.0 && v2[2]==4.0); 
 
-   /* // test assignment
+   // test assignment
     std::cout << "\ntest: assignment" << std::endl;
     Vector3d v3; 
     v3 = v2; 
     std::cout << "(2.0,3.0,4.0):\t" << v3 << std::endl; 
     assert(v3[0]==2.0 && v3[1]==3.0 && v3[2]==4.0); 
 
-    // test init-list for containers
+     // test init-list for containers
     std::cout << "\ntest: init list for container" << std::endl;
     std::cout << "the x, y, and z axis:" << std::endl;
     std::vector<Vector3d> vc {{1.0,0.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0}};
@@ -128,7 +165,7 @@ void test() {
     // scalar multiplication 
     std::cout << "\ntest: scalar scaling" << std::endl;
     std::cout << "scaling by 0.5" << std::endl;
-    for(auto& v : vc) v = 0.5*v; 
+    for(auto& v : vc) v = v*0.5; 
     for(auto v : vc) std::cout << v << "\t"; std::cout << std::endl;
     assert(vc[0][0]==0.5 && vc[0][1]==0.0 && vc[0][2]==0.0); 
     assert(vc[1][0]==0.0 && vc[1][1]==0.5 && vc[1][2]==0.0); 
@@ -140,7 +177,7 @@ void test() {
     for(auto& v : vc) v.normalize();
     for(auto v : vc) std::cout << v << "\t"; std::cout << std::endl;
 
-    // vector addition 
+    /*// vector addition 
     std::cout << "\ntest: addition" << std::endl;
     Vector3d v4 {0,0,0};
     for(auto& v : vc) v4 += v;
