@@ -6,7 +6,7 @@
 
 #include <vector>
 
-struct Vector3d
+/**struct Vector3d
 {
     double x_;
     double y_;
@@ -61,9 +61,40 @@ void normalize(Vector3d& v)
 void print(Vector3d& v)
 {
 	std::cout << "(" << v.x_ << ", " << v.y_ << ", " << v.z_ << ")" << std::endl;
+}**/
+
+// excercise
+
+class Vector3d {
+	private:
+	double x_;
+	double y_;
+	double z_;
+	
+	public:
+    double& operator[] (const int nIndex) {
+		
+		assert(nIndex < 3);
+		switch (nIndex) {
+			case 0: return x_; break;
+			case 1: return y_; break;
+			case 2: return z_; break;
+		}
+	}
+	
+	Vector3d() : x_{0}, y_{0}, z_{0} {}
+	Vector3d(double x, double y, double z): x_{x}, y_{y}, z_{z} {} //ctor with specific values
+	
+};
+
+std::ostream & operator<<(std::ostream & os, Vector3d& v) 
+{
+	os <<"(" << v[0] << ", " << v[1] << ", " << v[2] << ")" << std::endl;
+	
+	return os;
 }
  
-/*
+
 void test() {
 // test default constructor
     Vector3d v1;  
@@ -71,13 +102,14 @@ void test() {
     std::cout << "(0.0,0.0,0.0):\t" << v1 << std::endl; 
     assert(v1[0]==0.0 && v1[1]==0.0 && v1[2]==0.0); 
 
-    // test init-list
+    
+	// test init-list
     std::cout << "\ntest: init-list ctor" << std::endl;
     Vector3d v2 {2.0, 3.0, 4.0};
     std::cout << "(2.0,3.0,4.0):\t" << v2 << std::endl; 
     assert(v2[0]==2.0 && v2[1]==3.0 && v2[2]==4.0); 
 
-    // test assignment
+   /* // test assignment
     std::cout << "\ntest: assignment" << std::endl;
     Vector3d v3; 
     v3 = v2; 
@@ -147,12 +179,12 @@ void test() {
     assert(sp1==0); 
     double sp2 = dot(v100,v100);
     std::cout << v100 << "." << v100 << " = " << sp2 << std::endl;
-    assert(sp2==1);  
+    assert(sp2==1);  */
 }
-*/
+
 
 int main()
 {
-    //test();
+    test();
 	return 0;
 }
