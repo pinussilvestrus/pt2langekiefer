@@ -100,7 +100,7 @@ class Vector3d {
         return *this;
 	}
 	
-	Vector3d& operator/ (double scala) {
+	Vector3d& operator/ (double scala) { // scalar division
 		x_ /= scala;
 		y_ /= scala;
 		z_ /= scala;
@@ -108,23 +108,57 @@ class Vector3d {
         return *this;
 	}
 	
+	Vector3d& operator+= (Vector3d &v) { // vector addition
+		x_ += v[0];
+		y_ += v[1];
+		z_ += v[2];
+		
+		return *this;
+	}
+	
+	Vector3d& operator-= (Vector3d &v) { // vector subtraction
+		x_ -= v[0];
+		y_ -= v[1];
+		z_ -= v[2];
+		
+		return *this;
+	}
+	
+	Vector3d& operator- () { // unary minus
+		Vector3d& v = *this;
+		v[0] *= -1;
+		v[1] *= -1;
+		v[2] *= -1;
+		
+		return v;
+	}
+	
 	Vector3d() : x_{0}, y_{0}, z_{0} {}
 	Vector3d(double x, double y, double z): x_{x}, y_{y}, z_{z} {} //ctor with specific values (as list)
 	
-	double dot(Vector3d& v2)
+	double dot(Vector3d& v2) // german: betrag
 	{
     return x_*v2[0] + y_*v2[1] + z_*v2[2];
 	}
 
-	double length()
+	double length() // length of a vector
 	{
     return std::sqrt(dot(*this));
 	}
 
-	void normalize()
+	void normalize() // normalization
 	{
     double len = length();
 	*this = *this/len;
+	}
+	
+	Vector3d& cross(Vector3d& v2) // cross product
+	{
+		Vector3d v;
+		v[0] = y_*v2[2] - z_*v2[1];
+		v[1] = z_*v2[0] - x_*v2[2];
+		v[2] = x_*v2[1] - y_*v2[0];
+		return v;
 	}
 
 	
@@ -183,7 +217,7 @@ void test() {
     for(auto& v : vc) v.normalize();
     for(auto v : vc) std::cout << v << "\t"; std::cout << std::endl;
 
-    /*// vector addition 
+    // vector addition 
     std::cout << "\ntest: addition" << std::endl;
     Vector3d v4 {0,0,0};
     for(auto& v : vc) v4 += v;
@@ -204,25 +238,25 @@ void test() {
     Vector3d v7 {1,2,3};
     Vector3d v8;
     v8 = -v7;
-    std::cout << "-" << v7 << " = " << v8 << std::endl;
+    std::cout << "-" << -v7 << " = " << v8 << std::endl;
     assert(v8[0]==-1.0 && v8[1]==-2.0 && v8[2]==-3.0); 
 
     // cross product 
     std::cout << "\ntest: cross product" << std::endl;
     Vector3d v100 {1,0,0};
     Vector3d v010 {0,1,0};
-    Vector3d v001 = cross(v100, v010); 
+    Vector3d v001 = v100.cross(v010);
     std::cout << v100 << "x" << v010 << " = " << v001 << std::endl;
     assert(v001[0]==0.0 && v001[1]==0.0 && v001[2]==1.0); 
 
     // scalar product
     std::cout << "\ntest: dot product" << std::endl;
-    double sp1 = dot(v100,v010);
+    double sp1 = v100.dot(v010);
     std::cout << v100 << "." << v010 << " = " << sp1 << std::endl;
     assert(sp1==0); 
-    double sp2 = dot(v100,v100);
+    double sp2 = v100.dot(v100);
     std::cout << v100 << "." << v100 << " = " << sp2 << std::endl;
-    assert(sp2==1);  */
+    assert(sp2==1);  
 }
 
 
