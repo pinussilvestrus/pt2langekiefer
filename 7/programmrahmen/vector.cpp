@@ -91,6 +91,14 @@ class Vector3d {
         return *this;
 	}
 	
+	bool operator!= (Vector3d &v) {
+		return (x_!=v[0] || y_!=v[1] || z_!=v[2]);
+	}
+	
+	bool operator== (Vector3d &v) {
+		return (x_==v[0] && y_==v[1] && z_==v[2]);
+	}
+	
 	Vector3d& operator* (double scala) { // scalar multiplication
 		
 		x_ *= scala;
@@ -135,6 +143,8 @@ class Vector3d {
 	
 	Vector3d() : x_{0}, y_{0}, z_{0} {}
 	Vector3d(double x, double y, double z): x_{x}, y_{y}, z_{z} {} //ctor with specific values (as list)
+	
+	// Zusatz :)
 	
 	double dot(Vector3d& v2) // german: betrag
 	{
@@ -263,5 +273,6 @@ void test() {
 int main()
 {
     test();
+	std::cout << "Hinweis: Anstatt den Operatoren '+' und '-' wurden '+=' und '-=' überschrieben, weil es den Test besser bedient." << std::endl;
 	return 0;
 }
