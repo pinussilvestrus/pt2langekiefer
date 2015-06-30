@@ -87,6 +87,8 @@ class Vector3d {
 		x_ = v[0];
 		y_ = v[1];
 		z_ = v[2];
+        
+        return *this;
 	}
 	
 	Vector3d& operator* (double scala) { // scalar multiplication
@@ -94,12 +96,16 @@ class Vector3d {
 		x_ *= scala;
 		y_ *= scala;
 		z_ *= scala;
+        
+        return *this;
 	}
 	
 	Vector3d& operator/ (double scala) {
 		x_ /= scala;
 		y_ /= scala;
 		z_ /= scala;
+        
+        return *this;
 	}
 	
 	Vector3d() : x_{0}, y_{0}, z_{0} {}
