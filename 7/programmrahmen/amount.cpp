@@ -61,8 +61,8 @@ Amount::~Amount(void){
 
 void test() {
 	Amount amount(200,19);
-	//amount.changeBrutto(200);
-	amount.changeToCurrency("EUR");
+	amount.changeToCurrency("EUR"); //EUR is standard, it was only used to "show" the currency changing system
+	amount.changeBrutto(100);
 	amount.changeToCurrency("USD");
 	amount.changeToCurrency("EUR");
 	amount.defineDescription("I did not pay my bills");
