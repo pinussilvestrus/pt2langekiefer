@@ -47,10 +47,11 @@ public:
 		std::cout << "Changed the tax to " << mws << "\n" << "New netto: " << netto << "\n";
 	}
 };
-Amount::Amount(double number, double tax){
-	brutto = number;
-	mws = tax;
-	netto = brutto/(mws/100+1);
+
+Amount::Amount(double number, double tax):
+	brutto{number},
+	mws{tax},
+	netto{brutto/(mws/100+1)}{
 	std::cout << "Object created with following values: " << "\n" << "Brutto: " << brutto << "\n" << "Netto: " << netto << "\n" << "Mehrwertsteuer: " << mws << "\n";
 }
 
