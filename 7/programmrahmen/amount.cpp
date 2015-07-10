@@ -47,10 +47,11 @@ public:
 		std::cout << "Changed the tax to " << mws << "\n" << "New netto: " << netto << "\n";
 	}
 };
-Amount::Amount(double number, double tax){
-	brutto = number;
-	mws = tax;
-	netto = brutto/(mws/100+1);
+
+Amount::Amount(double number, double tax):
+	brutto{number},
+	mws{tax},
+	netto{brutto/(mws/100+1)}{
 	std::cout << "Object created with following values: " << "\n" << "Brutto: " << brutto << "\n" << "Netto: " << netto << "\n" << "Mehrwertsteuer: " << mws << "\n";
 }
 
@@ -60,8 +61,8 @@ Amount::~Amount(void){
 
 void test() {
 	Amount amount(200,19);
-	//amount.changeBrutto(200);
-	amount.changeToCurrency("EUR");
+	amount.changeToCurrency("EUR"); //EUR is standard, it was only used to "show" the currency changing system
+	amount.changeBrutto(100);
 	amount.changeToCurrency("USD");
 	amount.changeToCurrency("EUR");
 	amount.defineDescription("I did not pay my bills");
