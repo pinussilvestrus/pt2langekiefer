@@ -1,0 +1,3 @@
+Aufgabe 5.2, 5.3
+Aufgabe 6.2: Was passiert bei den Rekursionsschritten?
+Aufgabe 6.1: Grundgedanke des Prim-Algorithmus, Unterschied zu Dijsktra: nur Update, keine Summierung
